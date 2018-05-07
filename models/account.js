@@ -41,7 +41,7 @@ class Account {
 
   /**
    * @desc Encrypts user's password 
-   * @param password User's password
+   * @param password - user's password
    * @returns {Promise<object>}
    */
   encryptPassword (password) {
@@ -54,8 +54,8 @@ class Account {
 
   /**
    * @desc Registration of the user in the database
-   * @param username User's username 
-   * @param password User's password
+   * @param username - user's username 
+   * @param password - user's password
    * @returns {Promise<object>} 
    */
   register (username, password) {
@@ -70,7 +70,7 @@ class Account {
   }
 
 /**
-   * @desc Checks if user is  
+   * @desc [To be determined]
    * @returns {undefined}
    */
   validateUsername (USERNAME) {
