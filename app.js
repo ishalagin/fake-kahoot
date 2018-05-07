@@ -246,4 +246,3 @@ app.post('/login', (request, response) => {
 app.listen(port, () => {
   console.log(`Server is up on port 8080`)
 })
-

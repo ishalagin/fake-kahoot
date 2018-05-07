@@ -2,6 +2,7 @@
 const opentdb = require('../models/opentdb')
 const questions = require('../controllers/questions')
 const usersM = require('../models/users')
+const Account = require('../models/account')
 const promiseTest = opentdb.getQuestions()
 const invalidPromiseTestCatch = opentdb.getQuestions(
   numberofQuestions = 1,
@@ -67,8 +68,8 @@ describe('Testing methods in Question Class', () => {
     let instanceQuestions = new questions.Questions()
     let instanceUser = new usersM.User()
 
-   instanceQuestions.getQuestions().then(data => {
-    instanceQuestions.questionsList[1].answers = 1
+    instanceQuestions.getQuestions().then(data => {
+      instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 1)).toEqual({
         result: true,
         currentUser: instanceUser
@@ -89,21 +90,22 @@ describe('Testing methods in Question Class', () => {
   })
 })
 
-
-describe('Testing user registration/login', () => { 
-  // Template for registration test
+describe('Testing user registration/login', () => {
+  let accInst = new Account.Account()
   test('Registering users work as expected', async () => {
-    let username = 'jestUser',
-        password = 'jestUser';
-    await expect(Account.register(username, password)).resolves.toEqual({
-      reason: 'You have successfully registered!',
-    });
+    let username = 'jestUser'
+    let password = 'jestUser'
+    await expect(accInst.register(username, password)).resolves.toEqual(true)
   })
 
-  // Template for login test
   test('Login work as expected', async () => {
-    let username = 'jestUser',
-        password = 'jestUser';
-    await expect(Account.login(username, password)).resolves.toEqual(true);
-  }) 
-}) 
+    let username = 'jestUser'
+    let password = 'jestUser'
+    await expect(accInst.login(username, password)).resolves.toEqual(true)
+  })
+})
+
+test('testing database connection local', () => {
+  const db = require('../models/database')
+  expect(db.getUsersList()).toBe('test')
+})

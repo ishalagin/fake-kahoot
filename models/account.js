@@ -21,19 +21,14 @@ class Account {
     console.log(password)
     return new Promise((resolve, reject) => {
       db.executeQuery(`SELECT * FROM public."ACCOUNTS" WHERE "USERNAME" = '${username}';`).then((queryResult) => {
-        console.log(queryResult)
-        
-        // console.log(queryResult.slice(49, 109))
-        // let result = queryResult.slice(49, 109)
         let result = JSON.parse(queryResult)
-        console.log(result)
-        }).then((result) => {
-          if (bcrypt.compareSync(password, result)) {
-            resolve(true)
-          }
-        })
+        if (bcrypt.compareSync(password, result[0].PASSWORD)) {
+          resolve(true)
+        } else {
+          resolve(false)
+        }
       })
-      resolve(false)
+    })
   }
 
   // decrypPassword (password) {
@@ -46,7 +41,7 @@ class Account {
 
   /**
    * @desc Encrypts user's password 
-   * @param password - user's password
+   * @param password User's password
    * @returns {Promise<object>}
    */
   encryptPassword (password) {
@@ -59,8 +54,8 @@ class Account {
 
   /**
    * @desc Registration of the user in the database
-   * @param username - user's username 
-   * @param password - user's password
+   * @param username User's username 
+   * @param password User's password
    * @returns {Promise<object>} 
    */
   register (username, password) {

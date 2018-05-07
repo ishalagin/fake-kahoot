@@ -17,8 +17,6 @@ let notification = document.getElementById('notify')
 let notifyTitle = document.getElementById('notify_title')
 let notifyWrap = document.getElementById('wrap')
 
-
-
 let currentQuestion = 0
 let questionList = []
 let sessionCode = ''
@@ -73,7 +71,7 @@ let playWithoutLoggingIn = (event = 1) => {
   if (event === 1 || event.keyCode === 13) {
     if (userName.value !== '') {
       let xmlhttp = new XMLHttpRequest()
-      xmlhttp.open('POST', '/login', true)
+      xmlhttp.open('POST', '/loginWithoutAccount', true)
       xmlhttp.setRequestHeader(
         'Content-type',
         'application/x-www-form-urlencoded'
@@ -177,8 +175,3 @@ let displayNotification = (mode) => {
     document.getElementById('tooltip').style.backgroundImage = thumbUp
   }
 }
-
-
-
-
-
