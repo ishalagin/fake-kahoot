@@ -70,7 +70,7 @@ class Account {
   }
 
 /**
-   * @desc [To be determined]
+   * @desc Checks if user is  
    * @returns {undefined}
    */
   validateUsername (USERNAME) {
