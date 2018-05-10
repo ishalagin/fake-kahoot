@@ -16,6 +16,7 @@ let popupMessageStreak = document.getElementById('popupMessageStreak')
 let notification = document.getElementById('notify')
 let notifyTitle = document.getElementById('notify_title')
 let notifyWrap = document.getElementById('wrap')
+let questionType = document.getElementById('trivia_category')
 
 let currentQuestion = {}
 let userObject = {}
@@ -38,6 +39,17 @@ let assessQuestionResult = (chosenAnswer) => {
   }
   xmlhttp.send(`chosenAnswer=${chosenAnswer}`)
 }
+
+let assessQuestionType = (chosenAnswer) => {
+  let xmlhttp = new XMLHttpRequest()
+  xmlhttp.open('POST', '/starttrivia', true)
+  xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+  xmlhttp.onreadystatechange = () => {
+
+  }
+  xmlhttp.send(`chosenType=${questionType.options[questionType.selectedIndex].value}`)
+}
+
 
 let storeQuizResult = () => {
   questionViewWrap.style.top = '-100vh'
@@ -67,7 +79,7 @@ let storeQuizResult = () => {
  */
 let playWithoutAccount = (event = 1) => {
   if (event === 1 || event.keyCode === 13) {
-    if (userName.value !== '') {
+    if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== "0") {
       let xmlhttp = new XMLHttpRequest()
       xmlhttp.open('POST', '/playWithoutAccount', true)
       xmlhttp.setRequestHeader(
@@ -84,7 +96,7 @@ let playWithoutAccount = (event = 1) => {
       }
       xmlhttp.send(`username=${userName.value}`)
     } else {
-      swal('Error!', 'You left the username blank!', 'warning')
+      swal('Error!', 'You left the username or category blank!', 'warning')
     }
   }
 }
@@ -139,7 +151,7 @@ let startTrivia = () => {
       }, 300)
     }
   }
-  xmlhttp.send()
+  xmlhttp.send(`chosenType=${questionType.options[questionType.selectedIndex].value}`)
 }
 /**
  * @desc Displays a game question
