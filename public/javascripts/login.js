@@ -1,7 +1,7 @@
 let loginWrap = document.getElementById('loginWrap')
 let overlayWindow = document.getElementById('overlayWindow')
 let loginInputUsername = document.getElementById('loginInputUsername')
-let loginInputPassword =document.getElementById('loginInputPassword')
+let loginInputPassword = document.getElementById('loginInputPassword')
 
 overlayWindow.addEventListener('click', () => {
   overlayWindow.style.backgroundColor = 'rgba(236, 239, 241, 0)'
@@ -23,16 +23,33 @@ let showLoginWindow = () => {
   }, 10)
 }
 
-let logIn = () => {
+let login = () => {
   if (loginInputPassword !== '' && loginInputUsername !== '') {
-    let xmlhttp = new XMLHttpRequest()
-    xmlhttp.open('POST', '/login', true)
-    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-    xmlhttp.onreadystatechange = () => {
+    serverRequest('POST', '/login', `username=${loginInputUsername.value}&password=${loginInputPassword.value}`, (xmlhttp) => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        console.log(xmlhttp.responseText)
+        console.log('asdfgh')
+        swal({
+          title: 'Success',
+          text: 'Login successful!',
+          icon: 'success'
+        }).then((value) => {
+          window.location.reload()
+        })
+      } else if (xmlhttp.readyState === 4 && xmlhttp.status === 406) {
+        swal({
+          title: 'Failed',
+          text: 'Invalid username and password pair!',
+          icon: 'warning'
+        })
       }
-    }
-    xmlhttp.send(`username=${loginInputUsername.value}&password=${loginInputPassword.value}`)
+    })
   }
+}
+
+let logout = () => {
+  serverRequest('POST', '/logout', '', (xmlhttp) => {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      window.location = '/'
+    }
+  })
 }
