@@ -109,6 +109,7 @@ let getNextQuestion = () => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
       currentQuestion = JSON.parse(xmlhttp.responseText)
       displayQuestion()
+      startMyTimer()
       greetBox.style.opacity = '0'
       setTimeout(() => {
         greetBox.style.display = 'none'
@@ -162,6 +163,7 @@ let displayQuestion = () => {
     setTimeout(() => {
       notifyWrap.style.display = 'none'
     }, 300)
+    startMyTimer()
   }, 1200)
 }
 
