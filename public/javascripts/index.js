@@ -40,17 +40,6 @@ let assessQuestionResult = (chosenAnswer) => {
   xmlhttp.send(`chosenAnswer=${chosenAnswer}`)
 }
 
-let assessQuestionType = (chosenAnswer) => {
-  let xmlhttp = new XMLHttpRequest()
-  xmlhttp.open('POST', '/starttrivia', true)
-  xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-  xmlhttp.onreadystatechange = () => {
-
-  }
-  xmlhttp.send(`chosenType=${questionType.options[questionType.selectedIndex].value}`)
-}
-
-
 let storeQuizResult = () => {
   questionViewWrap.style.top = '-100vh'
   let xmlhttp = new XMLHttpRequest()
@@ -134,8 +123,8 @@ let getNextQuestion = () => {
 }
 
 /**
- * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears
- *
+ * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category value to back end.
+ * 
  */
 let startTrivia = () => {
   let xmlhttp = new XMLHttpRequest()

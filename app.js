@@ -137,6 +137,11 @@ app.post('/getnextquestion', (request, response) => {
   }
 })
 
+/**
+ * @desc If user has session ID then create new question with chosen question type, else sends 500 to indicate that an interal server error occured.
+ * @param {Object} request - Node.js request object
+ * @param {Object} response - Node.js response object
+ */
 app.post('/starttrivia', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
@@ -152,7 +157,7 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
- * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured
+ * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured.
  * @param {Object} request - Node.js request object
  * @param {Object} response - Node.js response object
  */
