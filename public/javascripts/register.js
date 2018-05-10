@@ -85,14 +85,14 @@ nameIcon.addEventListener('mouseover', function () {
   }
   xmlhttp.send(`USERNAME=${userNameInput.value}`)
   if (nameIcon.getAttribute('src') === '/assets/images/icons/cross.svg') {
-    hintWrap.innerHTML = 'Sorry, this user name already exists. Pick another one.'
+    hintWrap.innerHTML = 'Sorry, this user name is already taken. Try another one.'
     hintWrap.style.display = 'block'
   }
 })
 
 passwordIcon.addEventListener('mouseover', function () {
   if (passwordIcon.getAttribute('src') === '/assets/images/icons/cross.svg') {
-    hintWrap.innerHTML = 'Password must be a minimum of six characters and include at least one uppercase letter,one lowercase letter, and one number. '
+    hintWrap.innerHTML = 'Password must be a minimum of six characters and include at least one uppercase letter, one lowercase letter, and one number. '
     hintWrap.style.display = 'block'
   }
 })

@@ -57,19 +57,16 @@
 }
 
 #hintWrap {
-    position: fixed;
-    width: 23%;
-    height: 19%;
-    background-color: rgba(115,115,115,0.8);
-    right:5%;
-    top:15%;
-    bottom: 0%;
-    margin: auto;
-    border-radius: 15px;
+    position: absolute;
+    width: 20%;
+    background-color: var(--background-color);
+    right:7%;
+    top:45%;
+    border-radius: 5px;
     display: none;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 500;
     line-height: 1.2em;
-    padding: 2%;
+    padding: 1.5%;
     color: white;
 }
