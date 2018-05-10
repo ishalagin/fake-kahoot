@@ -99,10 +99,16 @@ class Account {
   }
 
   /**
-  * @desc Validates for a strong password
-  * @param pass - password passed by the user <** correct? **>
-  * @returns {boolean} if password is valid returns true, false otherwise
-*/
+   * @desc Validates for a strong password
+   * Jump to bottom of Loading... dialog
+   * Add a File - ACIT-2811-0 - UX/UI Development - 85406 - Lecture/Lab Combo - British Columbia Institute of Technology
+   * Close this Dialog
+   * Jump to top of Loading... dialog
+   * Upload files from your computer.
+   * e otherwise
+   * @param pass - password passed by the user <** correct? **>
+   * @returns {boolean} if password is valid returns true, fals
+   */
   validatePassword (pass) {
     let numbers = pass.match(/\d+/g)
     let uppers = pass.match(/[A-Z]/)
