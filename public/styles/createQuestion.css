@@ -1,0 +1,77 @@
+#createQuestionWrap {
+    position: absolute;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 50vw;
+    min-height: 30vh;
+    top: -100%;
+    left: 0;
+    right: 0;
+    padding-bottom: 0.5em;
+    margin: auto;
+    font-size: 1.25em;
+    background-color: var(--background-color);
+    transition: 0.3s;
+}
+
+#createQuestionOverlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+    background-color: rgba(236, 239, 241, 0);
+    display: none;
+    z-index: 50;
+    transition: 0.3s;
+}
+
+.createQuestionFieldWrap {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 3em;
+    padding: 0.5em;
+    margin: 0em;
+    text-align: center;
+}
+
+#createQuestionMessage {
+    font-size: 1.25em;
+    color: white;
+}
+
+.createQuestionInputText {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 80%;
+    height: 100%;
+    padding: 0 0.5em;
+    font-size: 1.15em;
+    margin: 0;
+    border: none;
+    background-color: rgba(245,245,245 ,1);
+    color: rgba(33,33,33 ,1);
+}
+
+#createButton {
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    /*width: 30%;*/
+    height: 100%;
+    padding: 0 0.5em;
+    margin: 0 0.5em;
+    font-size: 1.15em;
+    font-weight: 700;
+    background-color: rgba(2, 119, 189, 1);
+    color: var(--light-font-color);
+    border: none;
+}
+
+.createQuestionIcons {
+    height: 80%;
+    position: relative;
+    top:20%;
+}

@@ -198,6 +198,10 @@ app.get('/register', (request, response) => {
   response.render('register.hbs')
 })
 
+app.get('/profile', (request, response) => {
+  response.render('profile.hbs')
+})
+
 /**
  * @desc If requested page is not found function renders 404 error page
  * @param {Object} request - Node.js request object

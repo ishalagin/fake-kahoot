@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <link rel="stylesheet" type="text/css" href="./styles/general.css">
+        <link rel="stylesheet" type="text/css" href="./styles/index.css">
+        <link rel="stylesheet" type="text/css" href="./styles/profile.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        {{> head}}
+    </head>
+    <body>
+        {{> menu}}
+        {{> createQuestion}}
+        <div id="content">
+            <div class="background" id="contentBackground"></div>
+            <div id="createQuestionButton" class="cards buttons" onclick="showCreateQuestionWindow()">Create Question</div>
+        </div>
+        <script src="javascripts/profile.js"></script>
+    </body>
+</html>
