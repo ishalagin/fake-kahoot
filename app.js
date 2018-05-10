@@ -82,6 +82,11 @@ app.get('/', (request, response) => {
   response.render('index.hbs')
 })
 
+/**
+ * @desc Function sends post request to the server to store user, responds with message indicating success or failure
+ * @param {Object} request - Node.js request object contains session data
+ * @param {Object} response - Node.js response object, responds with message indicating success or failure
+ */
 app.post('/storeuser', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
@@ -118,7 +123,9 @@ app.get('/leaderboard', (request, response) => {
 })
 
 /**
- *
+ * @desc Function sends post request for the next question, responds with question object or a number indicating reason for a failure
+ * @param {Object} request - Node.js request object contains session data
+ * @param {Object} response - Node.js response object, responds with question object or a number indicating reason for a failure
  */
 app.post('/getnextquestion', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -152,9 +159,9 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
- * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @desc Function sends post request to the server, if user has session ID responds with result object, else responds with 400 to indicate that an error occured
+ * @param {Object} request - Node.js request object contains session data
+ * @param {Object} response - Node.js response object, responds with questionObject, or with 400 if error occured
  */
 app.post('/validateanswer', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -202,9 +209,9 @@ app.get('*', (request, response) => {
 })
 
 /**
- * @desc If username is valid sends true to the server, else false
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @desc Functions sends post request to the server containing username, if username is valid responds with true, else responds with false
+ * @param {Object} request - Node.js request object, contains username
+ * @param {Object} response - Node.js response object, responds with true if username is valid, else false
  */
 app.post('/validateusername', (request, response) => {
   let userAccount = new account.Account()
@@ -227,6 +234,11 @@ app.post('/validatepassword', (request, response) => {
   }
 })
 
+/**
+ * @desc Function sends post request to register user, responds with true for success, else with false
+ * @param {Object} request - Node.js request object contains account data
+ * @param {Object} response - Node.js response object, responds with true for success, else with false
+ */
 app.post('/register', (request, response) => {
   let USERNAME = request.body.USERNAME.toString()
   let PASSWORD = request.body.PASSWORD.toString()
@@ -246,9 +258,9 @@ app.post('/register', (request, response) => {
 })
 
 /**
- * @desc If the user exists logs him in 
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @desc Sends request to log user in
+ * @param {Object} request - Node.js request object contains username and password
+ * @param {Object} response - Node.js response object contains user account data
  */
 app.post('/login', (request, response) => {
   let username = request.body.username
