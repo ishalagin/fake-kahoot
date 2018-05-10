@@ -82,17 +82,63 @@ app.get('/', (request, response) => {
   response.render('index.hbs')
 })
 
+/**
+ * @desc TBD
+ */
+app.post('/checkLoginStatus', (request, response) => {
+  let sessionID = request.session.id.toString()
+  if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
+    response.send(playingUsers[sessionID].user.toJSON())
+  } else {
+    response.sendStatus(403)
+  }
+})
+
+/**
+ * @desc If the user exists logs him in
+ * @param {Object} request - Node.js request object
+ * @param {Object} response - Node.js response object
+ */
+app.post('/login', (request, response) => {
+  let username = request.body.username
+  let password = request.body.password
+  let userAccount = new account.Account()
+  userAccount.login(username, password).then((result) => {
+    if (result) {
+      let sessionID = request.session.id.toString()
+      playingUsers[sessionID] = {}
+      playingUsers[sessionID].user = userAccount
+      response.sendStatus(200)
+    } else {
+      response.sendStatus(406)
+    }
+  })
+})
+
+/**
+ * @desc TBD
+ */
+app.post('/logout', (request, response) => {
+  let sessionID = request.session.id.toString()
+  delete playingUsers[sessionID]
+  response.sendStatus(200)
+})
+
 app.post('/storeuser', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
-    let userList = new users.Users()
-    let userObject = playingUsers[sessionID].user
-    userList.storeUser(userObject)
-    delete playingUsers[sessionID]
-    console.log(playingUsers)
-    response.send('Quiz result stored successfully!')
+    if (playingUsers[sessionID].user !== undefined && playingUsers[sessionID].user.userID !== undefined) {
+      playingUsers[sessionID].user.saveCurrentScore().then((result) => {
+        response.sendStatus(201)
+      }).catch((error) => {
+        console.log(error)
+        response.sendStatus(400)
+      })
+    } else {
+      response.sendStatus(401)
+    }
   } else {
-    response.send('Unable to store quiz result!')
+    response.sendStatus(403)
   }
 })
 
@@ -131,9 +177,11 @@ app.post('/getnextquestion', (request, response) => {
         delete playingUsers[sessionID].user
         response.sendStatus(204)
       }
+    } else {
+      response.sendStatus(401)
     }
   } else {
-    response.sendStatus(500)
+    response.sendStatus(403)
   }
 })
 
@@ -146,7 +194,7 @@ app.post('/starttrivia', (request, response) => {
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
-    response.sendStatus(500)
+    response.sendStatus(403)
   }
 })
 
@@ -168,7 +216,7 @@ app.post('/validateanswer', (request, response) => {
     )
     response.send(result)
   } else {
-    response.send(400)
+    response.send(403)
   }
 })
 /**
@@ -183,7 +231,7 @@ app.get('/about', (request, response) => {
 
 
 /**
- * @desc Renders Register page
+ * @desc Renders Sign Up page
  * @param {Object} request - Node.js request object
  * @param {Object} response - Node.js response object
  */
@@ -209,9 +257,9 @@ app.post('/validateusername', (request, response) => {
   let userAccount = new account.Account()
   userAccount.validateUsername(request.body.USERNAME.toString()).then((result) => {
     if (result) {
-      response.send(true)
+      response.sendStatus(200)
     } else {
-      response.send(false)
+      response.sendStatus(406)
     }
   })
 })
@@ -220,9 +268,9 @@ app.post('/validatepassword', (request, response) => {
   let userAccount = new account.Account()
   let result = userAccount.validatePassword(request.body.PASSWORD.toString())
   if (result) {
-    response.send(true)
+    response.sendStatus(200)
   } else {
-    response.send(false)
+    response.sendStatus(406)
   }
 })
 
@@ -239,29 +287,7 @@ app.post('/register', (request, response) => {
         response.send(finalResult)
       })
     } else {
-      response.send(false)
-    }
-  })
-})
-
-/**
- * @desc If the user exists logs him in
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
- */
-app.post('/login', (request, response) => {
-  let username = request.body.username
-  let password = request.body.password
-  let userAccount = new account.Account()
-  userAccount.login(username, password).then((result) => {
-    console.log(result)
-    if (result) {
-      let sessionID = request.session.id.toString()
-      playingUsers[sessionID] = {}
-      playingUsers[sessionID].user = userAccount
-      response.send({
-        'userObject': userAccount
-      })
+      response.sendStatus(406)
     }
   })
 })
