@@ -1,5 +1,5 @@
 const account = require('./models/account.js')
-
+const userQuestions = require('./models/userQuestions')
 /**
  * @desc Import cookie-session module and assign cookieSession as constant
  * @type {Object}
@@ -305,6 +305,24 @@ app.post('/register', (request, response) => {
       response.sendStatus(406)
     }
   })
+})
+
+app.post('/createQuestion', (request, response) => {
+  let QUESTION_CONTENT = request.body.QUESTION_CONTENT.toString()
+  let RIGHT_ANSWER = request.body.RIGHT_ANSWER.toString()
+  let WRONG_ANSWER1 = request.body.WRONG_ANSWER1.toString()
+  let WRONG_ANSWER2 = request.body.WRONG_ANSWER2.toString()
+  let WRONG_ANSWER3 = request.body.WRONG_ANSWER3.toString()
+  let session_id = request.session.id.toString()
+  let user_id = playingUsers[session_id].user.userID
+
+  userQuestions.createQuestion(QUESTION_CONTENT,RIGHT_ANSWER,WRONG_ANSWER1,WRONG_ANSWER2,WRONG_ANSWER3,user_id).then((result) => {
+    if (result) {
+      response.sendStatus(200)
+    } else {
+      response.sendStatus(406)
+    }
+  }) 
 })
 
 /**

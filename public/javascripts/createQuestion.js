@@ -27,15 +27,26 @@ let showCreateQuestionWindow = () => {
 }
 
 let createQuestion = () => {
-  if (questionInput.value !== '' && correctAnswerInput.value !== '' && wrongAnswerInput1.value !== '' && wrongAnswerInput2.value !== '' && wrongAnswerInput3.value !== '') {
     let xmlhttp = new XMLHttpRequest()
     xmlhttp.open('POST', '/createQuestion', true)
     xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
     xmlhttp.onreadystatechange = () => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        console.log(xmlhttp.responseText)
+        swal({
+          title: 'Success',
+          text: 'Question created!',
+          icon: 'success'
+        }).then((value) => {
+          window.location.reload()
+        })
+      } else {
+        swal({
+          title: 'Failed',
+          text: 'Failed to create question!',
+          icon: 'error'
+        })
       }
     }
-    xmlhttp.send(`username=${loginInputUsername.value}&password=${loginInputPassword.value}`)
-  }
+    xmlhttp.send(`QUESTION_CONTENT=${questionInput.value}&RIGHT_ANSWER=${correctAnswerInput.value}&WRONG_ANSWER1=${wrongAnswerInput1.value}&WRONG_ANSWER2=${wrongAnswerInput2.value}&WRONG_ANSWER3=${wrongAnswerInput3.value}`)
+  
 }

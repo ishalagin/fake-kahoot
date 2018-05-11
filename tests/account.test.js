@@ -13,8 +13,8 @@ const invalidPromiseTestCatch = opentdb.getQuestions(
 )
 
 beforeAll(() => {
-  db.executeQuery(`DELETE FROM public."ACCOUNTS"`)
-})
+  db.executeQuery(`DELETE FROM public."ACCOUNTS" WHERE "USERNAME" = 'jestUser1';`);
+});
 
 const invalidPromiseTest = opentdb.getQuestions
 
