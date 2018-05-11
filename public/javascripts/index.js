@@ -62,19 +62,8 @@ let storeQuizResult = () => {
  */
 let playWithoutAccount = (event = 1) => {
   if (event === 1 || event.keyCode === 13) {
-<<<<<<< HEAD
     if (userName.value !== '') {
       serverRequest('POST', '/playWithoutAccount', `username=${userName.value}`, (xmlhttp) => {
-=======
-    if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== "0") {
-      let xmlhttp = new XMLHttpRequest()
-      xmlhttp.open('POST', '/playWithoutAccount', true)
-      xmlhttp.setRequestHeader(
-        'Content-type',
-        'application/x-www-form-urlencoded'
-      )
-      xmlhttp.onreadystatechange = () => {
->>>>>>> 4c70c905a8e092e3aa8b2f1ffb5f7fa52c0f334b
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
           notifyTitle.innerHTML = `Welcome ${userName.value}`
           document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
@@ -130,12 +119,7 @@ let startTrivia = () => {
         greetBox.style.display = 'none'
       }, 300)
     }
-<<<<<<< HEAD
   })
-=======
-  }
-  xmlhttp.send(`chosenType=${questionType.options[questionType.selectedIndex].value}`)
->>>>>>> 4c70c905a8e092e3aa8b2f1ffb5f7fa52c0f334b
 }
 /**
  * @desc Displays a game question

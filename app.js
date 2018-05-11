@@ -207,15 +207,9 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
-<<<<<<< HEAD
  * @desc Function sends post request to the server, if user has session ID responds with result object, else responds with 400 to indicate that an error occured
  * @param {Object} request - Node.js request object contains session data
  * @param {Object} response - Node.js response object, responds with questionObject, or with 400 if error occured
-=======
- * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured.
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
->>>>>>> 4c70c905a8e092e3aa8b2f1ffb5f7fa52c0f334b
  */
 app.post('/validateanswer', (request, response) => {
   let sessionID = request.session.id.toString()
