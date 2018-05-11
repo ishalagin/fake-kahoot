@@ -10,7 +10,31 @@ test ('Test if createQuestion works', async () => {
 					'What is my name?',
 					'Shanyu',
 					'Pedram',
+					'Derek',
 					'Maksym',
-					'Derek'
-		)).toEqual(true)
+					1
+		)).resolves.toEqual(true)
+
+})
+
+test ('Test if createQuestion validation works (empty imput)', async () => {
+	await expect(userQuestions.createQuestion(
+					'What is my name?',
+					'',
+					'Pedram',
+					'Derek',
+					'Maksym',
+					1
+		)).resolves.toEqual(false)
+})
+
+test ('Test if createQuestion validation works (same answers)', async () => {
+	await expect(userQuestions.createQuestion(
+					'What is my name?',
+					'Shanyu',
+					'Shanyu',
+					'Derek',
+					'Maksym',
+					1
+		)).resolves.toEqual(false)
 })

@@ -17,6 +17,9 @@ let notification = document.getElementById('notify')
 let notifyTitle = document.getElementById('notify_title')
 let notifyWrap = document.getElementById('wrap')
 let questionType = document.getElementById('trivia_category')
+let questionDiff = document.getElementById('trivia_difficulty')
+
+
 
 let currentQuestion = {}
 let userObject = {}
@@ -62,17 +65,24 @@ let storeQuizResult = () => {
  */
 let playWithoutAccount = (event = 1) => {
   if (event === 1 || event.keyCode === 13) {
-    if (userName.value !== '') {
-      serverRequest('POST', '/playWithoutAccount', `username=${userName.value}`, (xmlhttp) => {
+    if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== "-1" && questionDiff.options[questionDiff.selectedIndex].value !== "-1") {
+      let xmlhttp = new XMLHttpRequest()
+      xmlhttp.open('POST', '/playWithoutAccount', true)
+      xmlhttp.setRequestHeader(
+        'Content-type',
+        'application/x-www-form-urlencoded'
+      )
+      xmlhttp.onreadystatechange = () => {
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
           notifyTitle.innerHTML = `Welcome ${userName.value}`
           document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
           userObject = JSON.parse(xmlhttp.responseText)
           startTrivia()
         }
-      })
+      }
+      xmlhttp.send(`username=${userName.value}`)
     } else {
-      swal('Error!', 'You left the username or category blank!', 'warning')
+      swal('Error!', 'Please fill out everything!', 'warning')
     }
   }
 }
@@ -106,11 +116,12 @@ let getNextQuestion = () => {
 }
 
 /**
- * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category value to back end.
+ * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category and difficulty value to back end.
+
  * 
  */
 let startTrivia = () => {
-  serverRequest('POST', '/starttrivia', '', (xmlhttp) => {
+  serverRequest('POST', '/starttrivia', `chosenType=${questionType.options[questionType.selectedIndex].value}&chosenDiff=${questionDiff.options[questionDiff.selectedIndex].value}`, (xmlhttp) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
       currentQuestion = JSON.parse(xmlhttp.responseText)
       displayQuestion()
@@ -121,6 +132,7 @@ let startTrivia = () => {
     }
   })
 }
+
 /**
  * @desc Displays a game question
  */

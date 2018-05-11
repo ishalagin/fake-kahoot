@@ -13,13 +13,13 @@ const invalidPromiseTestCatch = opentdb.getQuestions(
 )
 
 beforeAll(() => {
-  db.executeQuery(`DELETE FROM public."ACCOUNTS"`)
-})
+  db.executeQuery(`DELETE FROM public."ACCOUNTS" WHERE "USERNAME" = 'jestUser1';`);
+});
 
 const invalidPromiseTest = opentdb.getQuestions
 
 describe('Testing user registration/login', () => {
-  let accInst = new Account.Account()
+  let accInst = new Account.Account();
 
   test('Validating correct passwords', async () => {
     let password = ['hello1P', '123Hello123', '!@#Test3213!@##']
@@ -51,4 +51,13 @@ describe('Testing user registration/login', () => {
     let password = 'jestUser'
     await expect(accInst.login(username, password)).resolves.toEqual(true)
   })
+
+  
+  test('Validate password length, 5 characters password should be invalid', async () => {
+    let password = 'Helo1';
+    await expect(accInst.validatePassword(password)).toEqual(false);
+  })
 })
+
+
+
