@@ -17,7 +17,8 @@
                 <div id="greetBoxUsernameInputWrap">
                     <input name="user_name" class="cards" id="greetBoxUsernameInput" placeholder="Enter a username" playWithoutLoggingIn="login(event);"/>
                     <select name="trivia_category" class="cards" id="trivia_category">
-                        <option value="0">Select Quiz Category</option>
+                        <option value="-1">Select Quiz Category</option>
+                        <option value="0">Any Category</option>
                         <option value="9">General Knowledge</option>
                         <option value="10">Books</option>
                         <option value="11">Film</option>
@@ -43,6 +44,13 @@
                         <option value="31">Japanese Anime &amp; Manga</option>
                         <option value="32">Cartoon &amp; Animations</option>
                     </select>
+                    <select name="trivia_difficulty" class="cards" id="trivia_difficulty">
+                        <option value="-1">Select Quiz Difficulty</option>
+			            <option value="0">Any Difficulty</option>
+			            <option value="easy">Easy</option>
+			            <option value="medium">Medium</option>
+			            <option value="hard">Hard</option>
+		            </select>
                 </div>
                 <div id="greetBoxStartButtonWrap">
                     <div class="cards buttons greetBoxButtons" id="greetBoxStartButton" onclick="playWithoutAccount();" onkeypress="playWithoutAccount(event);">BEGIN</div>

@@ -147,8 +147,8 @@ app.post('/starttrivia', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
     playingUsers[sessionID].questions = newQuestions
-    console.log(request.body.chosenType)
-    newQuestions.getQuestions(10, request.body.chosenType).then((result) => {
+    console.log(request.body.chosenType, request.body.chosenDiff)
+    newQuestions.getQuestions(10, request.body.chosenType, request.body.chosenDiff).then((result) => {
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
