@@ -187,12 +187,18 @@ app.post('/getnextquestion', (request, response) => {
   }
 })
 
+/**
+ * @desc If user has session ID then create new question with chosen question type, else sends 500 to indicate that an interal server error occured.
+ * @param {Object} request - Node.js request object
+ * @param {Object} response - Node.js response object
+ */
 app.post('/starttrivia', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
     playingUsers[sessionID].questions = newQuestions
-    newQuestions.getQuestions().then((result) => {
+    console.log(request.body.chosenType)
+    newQuestions.getQuestions(10, request.body.chosenType).then((result) => {
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
@@ -201,9 +207,15 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
+<<<<<<< HEAD
  * @desc Function sends post request to the server, if user has session ID responds with result object, else responds with 400 to indicate that an error occured
  * @param {Object} request - Node.js request object contains session data
  * @param {Object} response - Node.js response object, responds with questionObject, or with 400 if error occured
+=======
+ * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured.
+ * @param {Object} request - Node.js request object
+ * @param {Object} response - Node.js response object
+>>>>>>> 4c70c905a8e092e3aa8b2f1ffb5f7fa52c0f334b
  */
 app.post('/validateanswer', (request, response) => {
   let sessionID = request.session.id.toString()
