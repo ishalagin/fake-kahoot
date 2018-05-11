@@ -90,7 +90,7 @@ class Account {
     return new Promise((resolve, reject) => {
       db.executeQuery('SELECT "USERNAME" FROM "ACCOUNTS"').then((result) => {
         let userArray = JSON.parse(result)
-        var found = userArray.some(function (el) {
+        let found = userArray.some(function (el) {
           return el.USERNAME === USERNAME
         })
         resolve(!found)
@@ -98,6 +98,15 @@ class Account {
     })
   }
 
+  regexUsername (username) {
+    let validRegEx = /^[a-zA-Z]{0,29}/
+    let matcher = username.match(validRegEx)
+    if (matcher !== null) {
+      return true
+    } else {
+      return false
+    }
+  }
   /**
    * @desc Validates for a strong password
    * Jump to bottom of Loading... dialog
@@ -107,18 +116,18 @@ class Account {
    * Upload files from your computer.
    * e otherwise
    * @param pass - password passed by the user <** correct? **>
-   * @returns {boolean} if password is valid returns true, fals
+   * @returns {boolean} if password is valid returns true, false
    */
   validatePassword (pass) {
     let numbers = pass.match(/\d+/g)
     let uppers = pass.match(/[A-Z]/)
     let lowers = pass.match(/[a-z]/)
     let lengths = pass.length >= 6
-    let valid = undefined
+    let valid
 
-    if (numbers === null || uppers === null || lowers === null || lengths === false) valid = false
+    if (numbers !== null && uppers !== null && lowers !== null && lengths) { valid = true }
 
-    if (numbers !== null && uppers !== null && lowers !== null && lengths) valid = true
+    if (numbers === null && uppers === null && lowers === null && lengths) { valid = false }
 
     return valid
   }
