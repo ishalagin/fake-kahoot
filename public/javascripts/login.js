@@ -1,7 +1,7 @@
 let loginWrap = document.getElementById('loginWrap')
 let overlayWindow = document.getElementById('overlayWindow')
 let loginInputUsername = document.getElementById('loginInputUsername')
-let loginInputPassword =document.getElementById('loginInputPassword')
+let loginInputPassword = document.getElementById('loginInputPassword')
 
 overlayWindow.addEventListener('click', () => {
   overlayWindow.style.backgroundColor = 'rgba(236, 239, 241, 0)'

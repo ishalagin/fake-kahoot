@@ -107,6 +107,7 @@ class Account {
       return false
     }
   }
+
   /**
    * @desc Validates for a strong password
    * Jump to bottom of Loading... dialog

@@ -1,0 +1,16 @@
+#createQuestionButton {
+	margin:10px;
+	display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 5%;
+  height: 2em;
+  width: fit-content;
+  border: none;
+  font-size: 1.5em;
+  text-align: center;
+  font-weight: 700;
+  line-height: 2em;
+  background-color: var(--background-color);
+  color: var(--light-font-color);
+}

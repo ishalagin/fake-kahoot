@@ -1,5 +1,5 @@
 const account = require('./models/account.js')
-
+const userQuestions = require('./models/userQuestions')
 /**
  * @desc Import cookie-session module and assign cookieSession as constant
  * @type {Object}
@@ -163,7 +163,9 @@ app.get('/leaderboard', (request, response) => {
 })
 
 /**
- *
+ * @desc Function sends post request for the next question, responds with question object or a number indicating reason for a failure
+ * @param {Object} request - Node.js request object contains session data
+ * @param {Object} response - Node.js response object, responds with question object or a number indicating reason for a failure
  */
 app.post('/getnextquestion', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -185,12 +187,18 @@ app.post('/getnextquestion', (request, response) => {
   }
 })
 
+/**
+ * @desc If user has session ID then create new question with chosen question type, else sends 500 to indicate that an interal server error occured.
+ * @param {Object} request - Node.js request object
+ * @param {Object} response - Node.js response object
+ */
 app.post('/starttrivia', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
     playingUsers[sessionID].questions = newQuestions
-    newQuestions.getQuestions().then((result) => {
+    console.log(request.body.chosenType)
+    newQuestions.getQuestions(10, request.body.chosenType).then((result) => {
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
@@ -199,9 +207,9 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
- * @desc If user has session ID sends result object to the server, else sends 400 to indicate that an error occured
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @desc Function sends post request to the server, if user has session ID responds with result object, else responds with 400 to indicate that an error occured
+ * @param {Object} request - Node.js request object contains session data
+ * @param {Object} response - Node.js response object, responds with questionObject, or with 400 if error occured
  */
 app.post('/validateanswer', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -228,8 +236,6 @@ app.get('/about', (request, response) => {
   response.render('about.hbs')
 })
 
-
-
 /**
  * @desc Renders Sign Up page
  * @param {Object} request - Node.js request object
@@ -237,6 +243,10 @@ app.get('/about', (request, response) => {
  */
 app.get('/register', (request, response) => {
   response.render('register.hbs')
+})
+
+app.get('/profile', (request, response) => {
+  response.render('profile.hbs')
 })
 
 /**
@@ -249,9 +259,9 @@ app.get('*', (request, response) => {
 })
 
 /**
- * @desc If username is valid sends true to the server, else false
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @desc Functions sends post request to the server containing username, if username is valid responds with true, else responds with false
+ * @param {Object} request - Node.js request object, contains username
+ * @param {Object} response - Node.js response object, responds with true if username is valid, else false
  */
 app.post('/validateusername', (request, response) => {
   let userAccount = new account.Account()
@@ -274,6 +284,11 @@ app.post('/validatepassword', (request, response) => {
   }
 })
 
+/**
+ * @desc Function sends post request to register user, responds with true for success, else with false
+ * @param {Object} request - Node.js request object contains account data
+ * @param {Object} response - Node.js response object, responds with true for success, else with false
+ */
 app.post('/register', (request, response) => {
   let USERNAME = request.body.USERNAME.toString()
   let PASSWORD = request.body.PASSWORD.toString()
@@ -286,6 +301,24 @@ app.post('/register', (request, response) => {
       userAccount.register(USERNAME, PASSWORD).then((finalResult) => {
         response.send(finalResult)
       })
+    } else {
+      response.sendStatus(406)
+    }
+  })
+})
+
+app.post('/createQuestion', (request, response) => {
+  let QUESTION_CONTENT = request.body.QUESTION_CONTENT.toString()
+  let RIGHT_ANSWER = request.body.RIGHT_ANSWER.toString()
+  let WRONG_ANSWER1 = request.body.WRONG_ANSWER1.toString()
+  let WRONG_ANSWER2 = request.body.WRONG_ANSWER2.toString()
+  let WRONG_ANSWER3 = request.body.WRONG_ANSWER3.toString()
+  let session_id = request.session.id.toString()
+  let user_id = playingUsers[session_id].user.userID
+
+  userQuestions.createQuestion(QUESTION_CONTENT,RIGHT_ANSWER,WRONG_ANSWER1,WRONG_ANSWER2,WRONG_ANSWER3,user_id).then((result) => {
+    if (result) {
+      response.sendStatus(200)
     } else {
       response.sendStatus(406)
     }

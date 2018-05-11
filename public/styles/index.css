@@ -51,7 +51,7 @@
 
 #greetBoxStartButtonWrap {
     position: absolute;
-    top: 55%;
+    top: 90%;
     height: 25%;
     text-align: center;
     width: 100%;
@@ -72,3 +72,26 @@
     background-color: var(--background-color);
     color: var(--light-font-color);
 }
+
+#trivia_category {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 0 5%;
+    left: 50%;
+    top: 120%;
+    height: 100%;
+    width: 80%;
+    margin: 0 0 0 -40%;
+    border: none;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#trivia_category option {
+    font-size: 1em;
+}
+
+select {
+    text-align: center;
+    text-align-last: center;
+  }
