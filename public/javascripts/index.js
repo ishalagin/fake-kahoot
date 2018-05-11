@@ -16,6 +16,7 @@ let popupMessageStreak = document.getElementById('popupMessageStreak')
 let notification = document.getElementById('notify')
 let notifyTitle = document.getElementById('notify_title')
 let notifyWrap = document.getElementById('wrap')
+let questionType = document.getElementById('trivia_category')
 
 let currentQuestion = {}
 let userObject = {}
@@ -71,7 +72,7 @@ let playWithoutAccount = (event = 1) => {
         }
       })
     } else {
-      swal('Error!', 'You left the username blank!', 'warning')
+      swal('Error!', 'You left the username or category blank!', 'warning')
     }
   }
 }
@@ -105,8 +106,8 @@ let getNextQuestion = () => {
 }
 
 /**
- * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears
- *
+ * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category value to back end.
+ * 
  */
 let startTrivia = () => {
   serverRequest('POST', '/starttrivia', '', (xmlhttp) => {
