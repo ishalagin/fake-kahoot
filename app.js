@@ -316,7 +316,7 @@ app.post('/createQuestion', (request, response) => {
   let session_id = request.session.id.toString()
   let user_id = playingUsers[session_id].user.userID
 
-  userQuestions.createQuestion(QUESTION_CONTENT,RIGHT_ANSWER,WRONG_ANSWER1,WRONG_ANSWER2,WRONG_ANSWER3,user_id).then((result) => {
+  userQuestions.createQuestion(QUESTION_CONTENT, RIGHT_ANSWER, WRONG_ANSWER1, WRONG_ANSWER2, WRONG_ANSWER3, user_id).then((result) => {
     if (result) {
       response.sendStatus(200)
     } else {
