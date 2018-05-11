@@ -13,11 +13,9 @@ userNameInput.addEventListener('blur', function () {
   xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      if (xmlhttp.response === 'true') {
-        nameIcon.src = '/assets/images/icons/checked.svg'
-      } else {
-        nameIcon.src = '/assets/images/icons/cross.svg'
-      }
+      nameIcon.src = '/assets/images/icons/checked.svg'
+    } else {
+      nameIcon.src = '/assets/images/icons/cross.svg'
     }
   }
   xmlhttp.send(`USERNAME=${userNameInput.value}`)
@@ -29,11 +27,9 @@ passwordInput.addEventListener('keyup', function () {
   xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      if (xmlhttp.response === 'true') {
-        passwordIcon.src = '/assets/images/icons/checked.svg'
-      } else {
-        passwordIcon.src = '/assets/images/icons/cross.svg'
-      }
+      passwordIcon.src = '/assets/images/icons/checked.svg'
+    } else {
+      passwordIcon.src = '/assets/images/icons/cross.svg'
     }
   }
   xmlhttp.send(`PASSWORD=${passwordInput.value}`)
@@ -76,11 +72,9 @@ nameIcon.addEventListener('mouseover', function () {
   xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      if (xmlhttp.response === 'true') {
-        nameIcon.src = '/assets/images/icons/checked.svg'
-      } else {
-        nameIcon.src = '/assets/images/icons/cross.svg'
-      }
+      nameIcon.src = '/assets/images/icons/checked.svg'
+    } else {
+      nameIcon.src = '/assets/images/icons/cross.svg'
     }
   }
   xmlhttp.send(`USERNAME=${userNameInput.value}`)
@@ -122,12 +116,17 @@ document.getElementById('signUpBoxCreateButton').addEventListener('click', funct
   xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
   xmlhttp.onreadystatechange = () => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      console.log(xmlhttp.response)
-      if (xmlhttp.response === 'true') {
-        swal('Success', 'Welcome to fakoot!', 'success')
-      } else {
-        swal('Woops', 'Registration failed. Check everything again.', 'error')
-      }
+      swal({
+        title: 'Success',
+        text: 'Registration successful!',
+        icon: 'success'
+      })
+    } else {
+      swal({
+        title: 'Failed',
+        text: 'Registration failed!',
+        icon: 'error'
+      })
     }
   }
   xmlhttp.send(`USERNAME=${userNameInput.value}&PASSWORD=${passwordInput.value}&CPASSWORD=${cpasswordInput.value}`)

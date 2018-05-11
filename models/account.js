@@ -4,9 +4,8 @@ const score = require('./score')
 const saltRounds = 10
 
 class Account {
-  constructor (username = undefined, password = undefined, userID = undefined) {
+  constructor (username = undefined, userID = undefined) {
     this.username = username
-    this.password = password
     this.userID = userID
     this.currentScore = new score.Score()
   }
@@ -18,12 +17,12 @@ class Account {
    * @returns {Promise<object>}
    */
   login (username, password) {
-    console.log(username)
-    console.log(password)
     return new Promise((resolve, reject) => {
       db.executeQuery(`SELECT * FROM public."ACCOUNTS" WHERE "USERNAME" = '${username}';`).then((queryResult) => {
         let result = JSON.parse(queryResult)
-        if (bcrypt.compareSync(password, result[0].PASSWORD)) {
+        if (result.length > 0 && bcrypt.compareSync(password, result[0].PASSWORD)) {
+          this.username = result[0].USERNAME
+          this.userID = result[0]['ACCOUNT_ID']
           resolve(true)
         } else {
           resolve(false)
@@ -65,10 +64,21 @@ class Account {
   toJSON () {
     return {
       'username': this.username,
-      'password': this.password,
       'userID': this.userID,
       'currentScore': this.currentScore.toJSON()
     }
+  }
+
+  saveCurrentScore () {
+    return new Promise((resolve, reject) => {
+      let date = new Date()
+      let timeStamp = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      db.executeQuery(`INSERT INTO public."SCORES" ("ACCOUNT_ID", "SCORE", "HIGHEST_STREAK", "DATE") VALUES ('${this.userID}', '${this.currentScore.userScore}', '${this.currentScore.highestStreak}', '${timeStamp}')`).then((result) => {
+        resolve(result)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
   }
 
   /**
@@ -89,10 +99,16 @@ class Account {
   }
 
   /**
-  * @desc Validates for a strong password
-  * @param pass - password passed by the user <** correct? **>
-  * @returns {boolean} if password is valid returns true, false otherwise
-*/
+   * @desc Validates for a strong password
+   * Jump to bottom of Loading... dialog
+   * Add a File - ACIT-2811-0 - UX/UI Development - 85406 - Lecture/Lab Combo - British Columbia Institute of Technology
+   * Close this Dialog
+   * Jump to top of Loading... dialog
+   * Upload files from your computer.
+   * e otherwise
+   * @param pass - password passed by the user <** correct? **>
+   * @returns {boolean} if password is valid returns true, fals
+   */
   validatePassword (pass) {
     let numbers = pass.match(/\d+/g)
     let uppers = pass.match(/[A-Z]/)
