@@ -124,11 +124,11 @@ class Account {
     let uppers = pass.match(/[A-Z]/)
     let lowers = pass.match(/[a-z]/)
     let lengths = pass.length >= 6
-    let valid
+    let valid = undefined
 
-    if (numbers !== null && uppers !== null && lowers !== null && lengths) { valid = true }
+    if (numbers === null || uppers === null || lowers === null || lengths === false) valid = false
 
-    if (numbers === null && uppers === null && lowers === null && lengths) { valid = false }
+    if (numbers !== null && uppers !== null && lowers !== null && lengths) valid = true
 
     return valid
   }
