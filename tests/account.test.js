@@ -78,7 +78,6 @@ describe('regexUsername() method tests', () => {
   test('test regex method for bad usernames', () => {
     let badUsername = ['@@@13123asdasdASDADS', '0123456789012345678901234567890123456789', 'asd\n123\n', 'a']
     for (let i = 0; i < badUsername.length; i++) {
-      console.log(accInst.regexUsername(badUsername[i]))
       expect(accInst.regexUsername(badUsername[i])).toBeFalsy()
     }
   })
