@@ -88,7 +88,7 @@ class Account {
    */
   validateUsername (USERNAME) {
     return new Promise((resolve, reject) => {
-      db.executeQuery('SELECT "USERNAME" FROM "ACCOUNTS"').then((result) => {
+      db.executeQuery('SELECT "USERNAME" FROM public."ACCOUNTS";').then((result) => {
         let userArray = JSON.parse(result)
         let found = userArray.some(function (el) {
           return el.USERNAME === USERNAME
