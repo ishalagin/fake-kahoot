@@ -277,7 +277,7 @@ app.post('/validateusername', (request, response) => {
 
 app.post('/validatepassword', (request, response) => {
   let userAccount = new account.Account()
-  let result = userAccount.validatePassword(request.body.PASSWORD.toString())
+  let result = userAccount.regexPassword(request.body.PASSWORD.toString())
   if (result) {
     response.sendStatus(200)
   } else {
@@ -297,7 +297,7 @@ app.post('/register', (request, response) => {
   let userAccount = new account.Account()
 
   userAccount.validateUsername(USERNAME).then((result) => {
-    if (result && userAccount.validatePassword(PASSWORD) && PASSWORD === CPASSWORD) {
+    if (result && userAccount.regexPassword(PASSWORD) && PASSWORD === CPASSWORD) {
       console.log('validation passed')
       userAccount.register(USERNAME, PASSWORD).then((finalResult) => {
         response.send(finalResult)
