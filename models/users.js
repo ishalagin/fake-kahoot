@@ -1,5 +1,5 @@
 const fs = require('fs')
-const db = require('/models/database')
+const db = require('./database')
 /**
  * @class Users
  * @classdesc This is the Users Class
@@ -19,7 +19,6 @@ class Users {
   }
 
   /**
-   * @deprecated
    * @desc loadUsers loads the user data from the database, if there is no file it will be created.
    * @returns {object} It will return the users_data.json as an object if the file exists
    */
