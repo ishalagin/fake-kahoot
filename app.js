@@ -142,12 +142,17 @@ app.post('/storeuser', (request, response) => {
   }
 })
 
-app.post('/playWithoutAccount', (request, response) => {
+app.post('/playAsGuest', (request, response) => {
   let sessionID = request.session.id.toString()
   let newUser = new account.Account(request.body.username)
   playingUsers[sessionID] = {}
   playingUsers[sessionID].user = newUser
   response.send(newUser.toJSON())
+})
+
+app.post('/play', (request, response) => {
+  let sessionID = request.session.id.toString()
+  response.send(playingUsers[sessionID].user.toJSON())
 })
 
 /**
