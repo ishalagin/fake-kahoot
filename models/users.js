@@ -1,6 +1,5 @@
 const fs = require('fs')
-const database = require('./database')
-
+const db = require('/models/database')
 /**
  * @class Users
  * @classdesc This is the Users Class
@@ -20,6 +19,7 @@ class Users {
   }
 
   /**
+   * @deprecated
    * @desc loadUsers loads the user data from the database, if there is no file it will be created.
    * @returns {object} It will return the users_data.json as an object if the file exists
    */
@@ -35,6 +35,7 @@ class Users {
   };
 
   /**
+   * @deprecated
     * It's a function that saves users' info into a file.
     */
   saveUsers () {
@@ -60,10 +61,10 @@ class Users {
   };
 
   /**
-     * @desc Sort user information with sortOption as keyword.
-     * @param {string} sortOption - keyword for sorting
-     * @return {array} sorted object contains user information
-     */
+   * @desc Sort user information with sortOption as keyword.
+   * @param {string} sortOption - keyword for sorting
+   * @return {array} sorted object contains user information
+   */
   sortScores (sortOption) {
     let userInfo = this.userList.user.slice(0)
     userInfo.sort((a, b) => {
