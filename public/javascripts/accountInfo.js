@@ -3,7 +3,7 @@ let accountMenuOptionProfile = document.getElementById('accountMenuOptionProfile
 let accountMenuOptionLogin = document.getElementById('accountMenuOptionLogin')
 let accountMenuOptionLogout = document.getElementById('accountMenuOptionLogout')
 
-let checkLoginStatus = () => {
+let checkLoginStatus = (callback = () => {}) => {
   serverRequest('POST', '/checkLoginStatus', '', (xmlhttp) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
       let userObject = JSON.parse(xmlhttp.responseText)
@@ -11,14 +11,14 @@ let checkLoginStatus = () => {
       accountMenuOptionProfile.style.display = 'block'
       accountMenuOptionLogin.style.display = 'none'
       accountMenuOptionLogout.style.display = 'block'
-      return true
+      callback(true)
     } else {
       accountMenuOptionProfile.style.display = 'none'
       accountMenuOptionLogin.style.display = 'block'
       accountMenuOptionLogout.style.display = 'none'
-      return false
+      callback(false)
     }
   })
 }
 
-checkLoginStatus()
+console.log(checkLoginStatus())

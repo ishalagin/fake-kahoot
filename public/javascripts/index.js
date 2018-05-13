@@ -9,6 +9,8 @@ let answer2 = document.getElementById('answer2')
 let answer3 = document.getElementById('answer3')
 let answer4 = document.getElementById('answer4')
 let userName = document.getElementById('greetBoxUsernameInput')
+let greetBoxPlayAsGuestButton = document.getElementById('greetBoxPlayAsGuestButton')
+let greetBoxPlayButton = document.getElementById('greetBoxPlayButton')
 let popupWrap = document.getElementById('popupWrap')
 let popupMessageUsername = document.getElementById('popupMessageUsername')
 let popupMessageScore = document.getElementById('popupMessageScore')
@@ -19,10 +21,22 @@ let notifyWrap = document.getElementById('wrap')
 let questionType = document.getElementById('trivia_category')
 let questionDiff = document.getElementById('trivia_difficulty')
 
-
-
 let currentQuestion = {}
 let userObject = {}
+
+let InitialScript = () => {
+  checkLoginStatus((status) => {
+    if (status === true) {
+      userName.style.display = 'none'
+      greetBoxPlayAsGuestButton.style.display = 'none'
+      greetBoxPlayButton.style.display = 'inline-block'
+    } else {
+      userName.style.display = 'inline-block'
+      greetBoxPlayAsGuestButton.style.display = 'inline-block'
+      greetBoxPlayButton.style.display = 'none'
+    }
+  })
+}
 
 let assessQuestionResult = (chosenAnswer) => {
   serverRequest('POST', '/validateanswer', `chosenAnswer=${chosenAnswer}`, (xmlhttp) => {
@@ -59,32 +73,54 @@ let storeQuizResult = () => {
   }, 1200)
 }
 
+let play = () => {
+  checkLoginStatus((status) => {
+    if (status) {
+      if (questionType.options[questionType.selectedIndex].value !== '-1' && questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
+        serverRequest('POST', '/play', '', (xmlhttp) => {
+          if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+            userObject = JSON.parse(xmlhttp.responseText)
+            notifyTitle.innerHTML = `Welcome ${userObject.username}`
+            document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
+            userObject = JSON.parse(xmlhttp.responseText)
+            startTrivia()
+          }
+        })
+      } else {
+        swal('Error!', 'Please fill out everything!', 'warning')
+      }
+    } else {
+      // swal('Error!', 'Unexpected request!\nPlease reload the page', 'warning')
+    }
+  })
+}
+
 /**
  *
  * @param {number} - ????
  */
-let playWithoutAccount = (event = 1) => {
-  if (event === 1 || event.keyCode === 13) {
-    if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== "-1" && questionDiff.options[questionDiff.selectedIndex].value !== "-1") {
-      let xmlhttp = new XMLHttpRequest()
-      xmlhttp.open('POST', '/playWithoutAccount', true)
-      xmlhttp.setRequestHeader(
-        'Content-type',
-        'application/x-www-form-urlencoded'
-      )
-      xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-          notifyTitle.innerHTML = `Welcome ${userName.value}`
-          document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
-          userObject = JSON.parse(xmlhttp.responseText)
-          startTrivia()
+let playAsGuest = (event = 1) => {
+  checkLoginStatus((status) => {
+    if (!status) {
+      if (event === 1 || event.keyCode === 13) {
+        if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== '-1' && questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
+          serverRequest('POST', '/playAsGuest', `username=${userName.value}`, (xmlhttp) => {
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+              userObject = JSON.parse(xmlhttp.responseText)
+              notifyTitle.innerHTML = `Welcome ${userObject.username}`
+              document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
+              userObject = JSON.parse(xmlhttp.responseText)
+              startTrivia()
+            }
+          })
+        } else {
+          swal('Error!', 'Please fill out everything!', 'warning')
         }
       }
-      xmlhttp.send(`username=${userName.value}`)
     } else {
-      swal('Error!', 'Please fill out everything!', 'warning')
+      swal('Error!', 'Unexpected request!\nPlease reload the page', 'warning')
     }
-  }
+  })
 }
 
 /**
@@ -117,8 +153,6 @@ let getNextQuestion = () => {
 
 /**
  * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category and difficulty value to back end.
-
- * 
  */
 let startTrivia = () => {
   serverRequest('POST', '/starttrivia', `chosenType=${questionType.options[questionType.selectedIndex].value}&chosenDiff=${questionDiff.options[questionDiff.selectedIndex].value}`, (xmlhttp) => {
@@ -175,3 +209,5 @@ let displayNotification = (mode) => {
     document.getElementById('tooltip').style.backgroundImage = thumbUp
   }
 }
+
+InitialScript()

@@ -19,8 +19,6 @@
                     <select name="trivia_category" class="cards" id="trivia_category">
                         <option value="-1">Select Quiz Category</option>
                         <option value="0">Any Category</option>
-
-
                         <option value="9">General Knowledge</option>
                         <option value="10">Books</option>
                         <option value="11">Film</option>
@@ -55,7 +53,8 @@
 		            </select>
                 </div>
                 <div id="greetBoxStartButtonWrap">
-                    <div class="cards buttons greetBoxButtons" id="greetBoxStartButton" onclick="playWithoutAccount();" onkeypress="playWithoutAccount(event);">BEGIN</div>
+                    <div class="cards buttons greetBoxButtons" id="greetBoxPlayAsGuestButton" onclick="playAsGuest();" onkeypress="playAsGuest(event);">PLAY AS GUEST</div>
+                    <div class="cards buttons greetBoxButtons" id="greetBoxPlayButton" onclick="play();">PLAY</div>
                 </div>
             </div>
             {{> questionView}}
