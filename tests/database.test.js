@@ -1,4 +1,5 @@
 /* eslint-env jest */
+const db = require('../models/database')
 beforeAll(() => {
   return undefined
 })
@@ -19,4 +20,12 @@ beforeEach(() => {
  */
 afterEach(() => {
   return undefined
+})
+
+test('test executeQuery with SELECT', async () => {
+  await expect(db.executeQuery('SELECT * FROM public."ACCOUNTS";')).toBeTruthy()
+})
+
+test('test executeQuery with INSERT', async () => {
+  await expect(db.executeQuery('INSERT')).toBeTruthy()
 })

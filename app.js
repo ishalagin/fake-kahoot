@@ -197,8 +197,9 @@ app.post('/starttrivia', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
     playingUsers[sessionID].questions = newQuestions
-    console.log(request.body.chosenType)
-    newQuestions.getQuestions(10, request.body.chosenType).then((result) => {
+    console.log(request.body.chosenType, request.body.chosenDiff)
+    newQuestions.getQuestions(10, request.body.chosenType, request.body.chosenDiff).then((result) => {
+
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
@@ -276,7 +277,7 @@ app.post('/validateusername', (request, response) => {
 
 app.post('/validatepassword', (request, response) => {
   let userAccount = new account.Account()
-  let result = userAccount.validatePassword(request.body.PASSWORD.toString())
+  let result = userAccount.regexPassword(request.body.PASSWORD.toString())
   if (result) {
     response.sendStatus(200)
   } else {
@@ -296,7 +297,7 @@ app.post('/register', (request, response) => {
   let userAccount = new account.Account()
 
   userAccount.validateUsername(USERNAME).then((result) => {
-    if (result && userAccount.validatePassword(PASSWORD) && PASSWORD === CPASSWORD) {
+    if (result && userAccount.regexPassword(PASSWORD) && PASSWORD === CPASSWORD) {
       console.log('validation passed')
       userAccount.register(USERNAME, PASSWORD).then((finalResult) => {
         response.send(finalResult)
@@ -316,13 +317,13 @@ app.post('/createQuestion', (request, response) => {
   let session_id = request.session.id.toString()
   let user_id = playingUsers[session_id].user.userID
 
-  userQuestions.createQuestion(QUESTION_CONTENT,RIGHT_ANSWER,WRONG_ANSWER1,WRONG_ANSWER2,WRONG_ANSWER3,user_id).then((result) => {
+  userQuestions.createQuestion(QUESTION_CONTENT, RIGHT_ANSWER, WRONG_ANSWER1, WRONG_ANSWER2, WRONG_ANSWER3, user_id).then((result) => {
     if (result) {
       response.sendStatus(200)
     } else {
       response.sendStatus(406)
     }
-  }) 
+  })
 })
 
 /**
