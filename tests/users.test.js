@@ -23,3 +23,7 @@ beforeEach(() => {
 afterEach(() => {
   return undefined
 })
+
+test('asdasd', () => {
+  return undefined
+})

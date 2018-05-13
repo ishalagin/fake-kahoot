@@ -49,7 +49,7 @@ class Questions {
    * @param userObject Object that contains current user's data including username, score, streak, etc.
    * @param questionNumber The current question to be assessed.
    * @param chosenAnswer The choice made by the user for the current question.
-   * @returns {{result: boolean, currentUser: *}} Object dictating wether the answer if right or wrong and the current user's data.
+   * @returns {{result: boolean, currentUser: *}} Object dictating whether the answer if right or wrong and the current user's data.
    */
   assessQuestionResult (userObject, questionNumber, chosenAnswer) {
     if (this.questionsList[questionNumber].answers === Number(chosenAnswer)) {

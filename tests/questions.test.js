@@ -1,6 +1,7 @@
 /* eslint-env jest */
 const usersM = require.requireActual('../models/users')
 const questions = require.requireActual('../controllers/questions')
+const account = require.requireActual('../models/account')
 
 beforeAll(() => {
   return undefined
@@ -40,7 +41,7 @@ describe('Testing methods in Question Class', () => {
 
   test('Testing assessQuestionResult; Answer False', () => {
     let instanceQuestions = new questions.Questions()
-    let instanceUser = new usersM.User()
+    let instanceUser = new account.Account()
     instanceQuestions.getQuestions().then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 2)).toEqual({
