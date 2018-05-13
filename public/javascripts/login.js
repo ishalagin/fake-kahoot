@@ -27,7 +27,6 @@ let login = () => {
   if (loginInputPassword !== '' && loginInputUsername !== '') {
     serverRequest('POST', '/login', `username=${loginInputUsername.value}&password=${loginInputPassword.value}`, (xmlhttp) => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        console.log('asdfgh')
         swal({
           title: 'Success',
           text: 'Login successful!',

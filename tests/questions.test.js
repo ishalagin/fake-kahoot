@@ -1,6 +1,7 @@
 /* eslint-env jest */
 const usersM = require.requireActual('../models/users')
 const questions = require.requireActual('../controllers/questions')
+const account = require.requireActual('../models/account')
 
 beforeAll(() => {
   return undefined
@@ -27,7 +28,7 @@ afterEach(() => {
 describe('Testing methods in Question Class', () => {
   test('Testing assessQuestionResult; Answer True', () => {
     let instanceQuestions = new questions.Questions()
-    let instanceUser = new usersM.User()
+    let instanceUser = new account.Account()
 
     instanceQuestions.getQuestions().then(data => {
       instanceQuestions.questionsList[1].answers = 1
@@ -40,7 +41,7 @@ describe('Testing methods in Question Class', () => {
 
   test('Testing assessQuestionResult; Answer False', () => {
     let instanceQuestions = new questions.Questions()
-    let instanceUser = new usersM.User()
+    let instanceUser = new account.Account()
     instanceQuestions.getQuestions().then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 2)).toEqual({
@@ -51,8 +52,9 @@ describe('Testing methods in Question Class', () => {
   })
 })
 
-test('test getQuestions', () => {
+test('test getQuestions', async () => {
   let testStructure = {
+    index: expect.anything(),
     question: expect.anything(),
     option1: expect.anything(),
     option2: expect.anything(),
@@ -60,8 +62,7 @@ test('test getQuestions', () => {
     option4: expect.anything()
   }
   let instanceQuestions = new questions.Questions()
-  expect.assertions(1)
-  return instanceQuestions.getQuestions().then(data => {
+  await instanceQuestions.getQuestions().then(data => {
     expect(data[0]).toEqual(testStructure)
   })
 })
