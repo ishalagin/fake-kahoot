@@ -71,8 +71,21 @@ class Account {
   saveCurrentScore () {
     return new Promise((resolve, reject) => {
       let date = new Date()
-      let timeStamp = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-      db.executeQuery(`INSERT INTO public."SCORES" ("ACCOUNT_ID", "SCORE", "HIGHEST_STREAK", "DATE") VALUES ('${this.userID}', '${this.currentScore.userScore}', '${this.currentScore.highestStreak}', '${timeStamp}')`).then((result) => {
+      let timeStamp = `${date.toLocaleDateString('en-CA')} ${date.toLocaleTimeString('en-CA')}`
+
+      db.executeQuery(
+        `INSERT INTO public."SCORES" (
+        "ACCOUNT_ID",
+        "SCORE",
+        "HIGHEST_STREAK",
+        "DATE"
+        ) VALUES (
+        '${this.userID}',
+        '${this.currentScore.userScore}',
+        '${this.currentScore.highestStreak}',
+        '${timeStamp}'
+        )`
+      ).then((result) => {
         resolve(result)
       }).catch((error) => {
         reject(error)
@@ -93,11 +106,7 @@ class Account {
           let found = userArray.some(function (el) {
             return el.USERNAME === USERNAME
           })
-          if (found) {
-            resolve(found)
-          } else {
-            reject(new Error('Username Not Found'))
-          }
+          resolve(!found)
         })
       } else {
         reject(new Error('Bad Username'))
