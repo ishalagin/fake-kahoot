@@ -1,5 +1,5 @@
 const fs = require('fs')
-const db = require('./database')
+
 /**
  * @class Users
  * @classdesc This is the Users Class
@@ -12,9 +12,8 @@ class Users {
    * @constructor {string} this.fileName
    * @param fileName
    */
-  constructor (fileName = './users_data.json') {
+  constructor (fileName = './models/users_data.json') {
     this.fileName = fileName
-    this.userList = []
     this.userList = this.loadUsers()
   }
 
@@ -26,17 +25,17 @@ class Users {
     if (fs.existsSync(this.fileName)) {
       return JSON.parse(fs.readFileSync(this.fileName))
     } else {
-      let object = {
+      let dummyFile = {
         'user': []
       }
-      fs.writeFileSync(this.fileName, JSON.stringify(object, null, 4), 'utf8')
+      fs.writeFileSync(this.fileName, JSON.stringify(dummyFile, null, 4), 'utf8')
+      return undefined
     }
   };
 
   /**
-   * @deprecated
-    * It's a function that saves users' info into a file.
-    */
+   * It's a function that saves users' info into a file.
+   */
   saveUsers () {
     fs.writeFileSync(this.fileName, JSON.stringify(this.userList, null, 4), 'utf8')
   };
@@ -48,7 +47,7 @@ class Users {
    */
   storeUser (userObject) {
     let date = new Date()
-    let timeStamp = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    let timeStamp = `${date.toLocaleDateString('en-CA')} ${date.toLocaleTimeString('en-CA')}`
 
     this.userList.user.push({
       userData: userObject.username,
@@ -108,7 +107,6 @@ class Users {
       }
       rankCounter++
     }
-
     return displayString
   };
 }

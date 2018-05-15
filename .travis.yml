@@ -1,0 +1,13 @@
+language: node_js
+sudo: required
+services:
+  - docker
+dist: trusty
+node_js:
+  - "node"
+services:
+  - postgresql
+script: "npm test -- --forceExit"
+before_script:
+  - psql -c 'create database travis;' -U postgres
+  - psql -f ./models/tables.sql
