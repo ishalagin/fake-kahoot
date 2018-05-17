@@ -26,6 +26,15 @@ let createQuestion = (Q, CA, WA1, WA2, WA3, userID) => {
   })
 }
 
+let getRandomQuestions = (num = 1) => {
+  return new Promise((resolve,reject) => {
+    db.executeQuery(`SELECT * FROM "QUESTIONS" ORDER BY RANDOM() LIMIT ${num}`).then((result) => {
+      resolve(result)
+    })
+  })
+}
+
 module.exports = {
-  createQuestion
+  createQuestion,
+  getRandomQuestions
 }

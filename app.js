@@ -133,6 +133,11 @@ app.post('/storeuser', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     if (playingUsers[sessionID].user !== undefined && playingUsers[sessionID].user.userID !== undefined) {
       playingUsers[sessionID].user.saveCurrentScore().then((result) => {
+        //console.log(playingUsers[sessionID].questions)
+        delete playingUsers[sessionID].questions
+        playingUsers[sessionID].user.currentScore.userScore = 0
+        playingUsers[sessionID].user.currentScore.currentStreak = 0
+        playingUsers[sessionID].user.currentScore.highestStreak = 0
         response.sendStatus(201)
       }).catch((error) => {
         console.log(error)
@@ -193,14 +198,58 @@ app.get('/leaderboard', (request, response) => {
  */
 app.post('/getnextquestion', (request, response) => {
   let sessionID = request.session.id.toString()
+  console.log(playingUsers[sessionID].questions.currentQuestion)
   if (Object.keys(playingUsers).includes(sessionID)) {
     if (playingUsers[sessionID].questions !== undefined) {
       if (playingUsers[sessionID].questions.currentQuestion < 9) {
         playingUsers[sessionID].questions.currentQuestion++
         response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
+      } else if (playingUsers[sessionID].questions.currentQuestion === 9) {
+        response.sendStatus(204)
       } else {
-        delete playingUsers[sessionID].questions
-        delete playingUsers[sessionID].user
+        response.sendStatus(401)
+      }
+    } else {
+      response.sendStatus(401)
+    }
+  } else {
+    response.sendStatus(403)
+  }
+})
+
+app.post('/getbonusquestion', (request, response) => {
+  let sessionID = request.session.id.toString()
+  if (Object.keys(playingUsers).includes(sessionID)) {
+    if (playingUsers[sessionID].questions !== undefined) {
+      if (playingUsers[sessionID].questions.currentQuestion === 9) {
+        userQuestions.getRandomQuestions().then((result) => {
+          console.log(result)
+          bonusQuestion = JSON.parse(result)[0]
+          console.log(bonusQuestion)
+          answerArray = _.shuffle([bonusQuestion.RIGHT_ANSWER,bonusQuestion.WRONG_ANSWER1,bonusQuestion.WRONG_ANSWER2,bonusQuestion.WRONG_ANSWER3])
+          console.log(answerArray)
+          playingUsers[sessionID].questions.questionsList.push({
+            'question': bonusQuestion.QUESTION_CONTENT,
+            'option1': answerArray[0],
+            'option2': answerArray[1],
+            'option3': answerArray[2],
+            'option4': answerArray[3],
+            'answers': _.indexOf(answerArray, bonusQuestion.RIGHT_ANSWER) + 1
+          })
+          i = playingUsers[sessionID].questions.minimalquestionsList.length
+          playingUsers[sessionID].questions.minimalquestionsList.push({
+            'index': playingUsers[sessionID].questions.minimalquestionsList.length,
+            'question': playingUsers[sessionID].questions.questionsList[i].question,
+            'option1': playingUsers[sessionID].questions.questionsList[i].option1,
+            'option2': playingUsers[sessionID].questions.questionsList[i].option2,
+            'option3': playingUsers[sessionID].questions.questionsList[i].option3,
+            'option4': playingUsers[sessionID].questions.questionsList[i].option4
+          })
+          console.log(playingUsers[sessionID].questions)
+          playingUsers[sessionID].questions.currentQuestion++
+          response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
+        }) 
+      } else {
         response.sendStatus(204)
       }
     } else {
@@ -221,9 +270,8 @@ app.post('/starttrivia', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
     playingUsers[sessionID].questions = newQuestions
-    console.log(request.body.chosenType, request.body.chosenDiff)
     newQuestions.getQuestions(10, request.body.chosenType, request.body.chosenDiff).then((result) => {
-
+      console.log(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
@@ -297,7 +345,7 @@ app.post('/validateusername', (request, response) => {
       response.sendStatus(406)
     }
   }).catch(error => {
-    console.log(error)
+    response.sendStatus(406)
   })
 })
 

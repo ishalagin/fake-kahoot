@@ -64,3 +64,7 @@ it('should ', () => {
     console.log(res1)
   })
 })
+
+test('Test if getRandomQuestions() works', async () => {
+  await expect(userQuestions.getRandomQuestions()).resolves.toBeTruthy()
+})

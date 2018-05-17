@@ -52,3 +52,10 @@ let logout = () => {
     }
   })
 }
+
+
+document.getElementById('loginInputPassword').addEventListener("keyup", function(ev){
+  if (ev.keyCode === 13) {
+    login()
+  }
+})

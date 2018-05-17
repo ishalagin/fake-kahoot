@@ -26,27 +26,23 @@ let showCreateQuestionWindow = () => {
   }, 10)
 }
 
+
 let createQuestion = () => {
-    let xmlhttp = new XMLHttpRequest()
-    xmlhttp.open('POST', '/createQuestion', true)
-    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
-    xmlhttp.onreadystatechange = () => {
-      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        swal({
-          title: 'Success',
-          text: 'Question created!',
-          icon: 'success'
-        }).then((value) => {
-          window.location.reload()
-        })
-      } else {
-        swal({
-          title: 'Failed',
-          text: 'Failed to create question!',
-          icon: 'error'
-        })
-      }
+  serverRequest('POST', '/createQuestion', `QUESTION_CONTENT=${questionInput.value}&RIGHT_ANSWER=${correctAnswerInput.value}&WRONG_ANSWER1=${wrongAnswerInput1.value}&WRONG_ANSWER2=${wrongAnswerInput2.value}&WRONG_ANSWER3=${wrongAnswerInput3.value}`, (xmlhttp) => {
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+      swal({
+        title: 'Success',
+        text: 'Question created!',
+        icon: 'success'
+      }).then((value) => {
+        window.location.reload()
+      })
+    } else {
+      swal({
+        title: 'Failed',
+        text: 'Failed to create question!',
+        icon: 'error'
+      })
     }
-    xmlhttp.send(`QUESTION_CONTENT=${questionInput.value}&RIGHT_ANSWER=${correctAnswerInput.value}&WRONG_ANSWER1=${wrongAnswerInput1.value}&WRONG_ANSWER2=${wrongAnswerInput2.value}&WRONG_ANSWER3=${wrongAnswerInput3.value}`)
-  
+  })
 }

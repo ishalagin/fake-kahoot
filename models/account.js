@@ -71,8 +71,8 @@ class Account {
   saveCurrentScore () {
     return new Promise((resolve, reject) => {
       let date = new Date()
-      let timeStamp = `${date.toLocaleDateString('en-CA')} ${date.toLocaleTimeString('en-CA')}`
-
+      let timeStamp = `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-CA')}`
+      console.log(this)
       db.executeQuery(
         `INSERT INTO public."SCORES" (
         "ACCOUNT_ID",
