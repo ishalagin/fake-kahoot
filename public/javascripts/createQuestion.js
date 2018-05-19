@@ -33,7 +33,7 @@ let createQuestion = () => {
       swal({
         title: 'Success',
         text: 'Question created!',
-        icon: 'success'
+        type: 'success'
       }).then((value) => {
         window.location.reload()
       })
@@ -41,7 +41,7 @@ let createQuestion = () => {
       swal({
         title: 'Failed',
         text: 'Failed to create question!',
-        icon: 'error'
+        type: 'error'
       })
     }
   })

@@ -55,3 +55,46 @@
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+#leaderboardInputWrap {
+    position: absolute;
+    top: 6%;
+    height: 5%;
+    width: 100%;
+    z-index: 2;
+}
+
+#ltrivia_category {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 0 5%;
+    left: 15%;
+    height: 100%;
+    width: 30%;
+    margin: auto;
+    border: none;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#ltrivia_difficulty {
+    position: absolute;
+    box-sizing: border-box;
+    padding: 0 5%;
+    right:15%;
+    height: 100%;
+    width: 30%;
+    margin: auto;
+    border: none;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#ltrivia_category option {
+    font-size: 1em;
+}
+
+select {
+    text-align: center;
+    text-align-last: center;
+  }

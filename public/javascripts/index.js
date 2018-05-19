@@ -43,10 +43,11 @@ let assessQuestionResult = (chosenAnswer) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
       let xmlhttpResult = JSON.parse(xmlhttp.responseText)
       userObject = xmlhttpResult.currentUser
+      rightanswer = xmlhttpResult.answer
       if (xmlhttpResult.result === true) {
-        displayNotification('right')
+        displayNotification('right', rightanswer)
       } else {
-        displayNotification('wrong')
+        displayNotification('wrong', rightanswer)
       }
       populatePopupResult()
     }
@@ -55,13 +56,14 @@ let assessQuestionResult = (chosenAnswer) => {
 
 let storeQuizResult = () => {
   serverRequest('POST', '/storeuser', '', (xmlhttp) => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 201) {
-      swal('Success', 'Your score has been saved!', 'success')
-    } else {
-      swal('Error', 'Unknown error!', 'error')
+    if (xmlhttp.readyState === 4 && xmlhttp.status === 202) {
+      console.log('score saved')
+    } else if (xmlhttp.readyState === 4 && xmlhttp.status === 401) {
+      swal('Score not saved', 'Please register to store your scores!', 'warning')
+    } else if (xmlhttp.readyState === 4 && xmlhttp.status === 403) {
+      swal('Error', "Unknown error! Couldn't save your score!", 'error')
     }
   })
-  
 }
 
 let play = () => {
@@ -147,11 +149,15 @@ let getNextQuestion = () => {
         }, 300)
       }, 1200)
       swal({
-        title: "Bonus Question!!",
-        text: "Do you want to answer a user-created bonus question?\nYou can double the score or lose it all!",
-        icon: "warning",
-        dangerMode: true,
-        buttons: ["Oh noez!", "Aww yiss!"],
+        title: 'Bonus Question!!',
+        text: 'Do you want to answer a user-created bonus question?\nYou can double the score or lose it all!',
+        type: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes!',
+        cancelButtonText: 'No!',
+        reverseButtons: true,
+        animation: false,
+        customClass: 'animated tada'
       }).then((doBonus) => {
         if (doBonus) {
           playBonus()
@@ -170,7 +176,9 @@ let getNextQuestion = () => {
           notifyWrap.style.display = 'none'
         }, 300)
       }, 1200)
-      storeQuizResult()
+      setTimeout(() => {
+        storeQuizResult()
+      }, 100)
       popupWrap.style.top = '50vh'
     }
   })
@@ -180,7 +188,6 @@ let playBonus = () => {
   serverRequest('POST', '/getbonusquestion', '', (xmlhttp) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
       currentQuestion = JSON.parse(xmlhttp.responseText)
-      console.log(currentQuestion)
       displayNotification('beer')
       displayQuestion()
       questionViewWrap.style.backgroundColor = 'rgba(255, 102, 0,1)'
@@ -235,12 +242,12 @@ let displayQuestion = () => {
  * @desc Displays a pop up notifying if the answer was right or wrong
  * @param {string} mode - refers to user answer right/wrong
  */
-let displayNotification = (mode) => {
+let displayNotification = (mode, answer) => {
   let thumbUp = 'url(/assets/images/icons/thumb-up.svg)'
   let thumbDown = 'url(/assets/images/icons/dislike.svg)'
   let beer = 'url(/assets/images/icons/beer.svg)'
   if (mode === 'wrong') {
-    notifyTitle.innerHTML = 'Wrong! :('
+    notifyTitle.innerHTML = '<div> Wrong! Right Answer Is\n' + answer + '</div>'
     document.getElementById('tooltip').style.backgroundImage = thumbDown
   } else if (mode === 'right') {
     notifyTitle.innerHTML = 'Good Job! :)'

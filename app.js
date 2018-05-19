@@ -133,12 +133,11 @@ app.post('/storeuser', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     if (playingUsers[sessionID].user !== undefined && playingUsers[sessionID].user.userID !== undefined) {
       playingUsers[sessionID].user.saveCurrentScore().then((result) => {
-        //console.log(playingUsers[sessionID].questions)
         delete playingUsers[sessionID].questions
         playingUsers[sessionID].user.currentScore.userScore = 0
         playingUsers[sessionID].user.currentScore.currentStreak = 0
         playingUsers[sessionID].user.currentScore.highestStreak = 0
-        response.sendStatus(201)
+        response.sendStatus(202)
       }).catch((error) => {
         console.log(error)
         response.sendStatus(400)
@@ -198,7 +197,6 @@ app.get('/leaderboard', (request, response) => {
  */
 app.post('/getnextquestion', (request, response) => {
   let sessionID = request.session.id.toString()
-  console.log(playingUsers[sessionID].questions.currentQuestion)
   if (Object.keys(playingUsers).includes(sessionID)) {
     if (playingUsers[sessionID].questions !== undefined) {
       if (playingUsers[sessionID].questions.currentQuestion < 9) {
@@ -223,11 +221,8 @@ app.post('/getbonusquestion', (request, response) => {
     if (playingUsers[sessionID].questions !== undefined) {
       if (playingUsers[sessionID].questions.currentQuestion === 9) {
         userQuestions.getRandomQuestions().then((result) => {
-          console.log(result)
           bonusQuestion = JSON.parse(result)[0]
-          console.log(bonusQuestion)
-          answerArray = _.shuffle([bonusQuestion.RIGHT_ANSWER,bonusQuestion.WRONG_ANSWER1,bonusQuestion.WRONG_ANSWER2,bonusQuestion.WRONG_ANSWER3])
-          console.log(answerArray)
+          answerArray = _.shuffle([bonusQuestion.RIGHT_ANSWER, bonusQuestion.WRONG_ANSWER1, bonusQuestion.WRONG_ANSWER2, bonusQuestion.WRONG_ANSWER3])
           playingUsers[sessionID].questions.questionsList.push({
             'question': bonusQuestion.QUESTION_CONTENT,
             'option1': answerArray[0],
@@ -245,10 +240,9 @@ app.post('/getbonusquestion', (request, response) => {
             'option3': playingUsers[sessionID].questions.questionsList[i].option3,
             'option4': playingUsers[sessionID].questions.questionsList[i].option4
           })
-          console.log(playingUsers[sessionID].questions)
           playingUsers[sessionID].questions.currentQuestion++
           response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
-        }) 
+        })
       } else {
         response.sendStatus(204)
       }
@@ -269,9 +263,9 @@ app.post('/starttrivia', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
     let newQuestions = new questions.Questions()
+    playingUsers[sessionID].currentReview = []
     playingUsers[sessionID].questions = newQuestions
     newQuestions.getQuestions(10, request.body.chosenType, request.body.chosenDiff).then((result) => {
-      console.log(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
       response.send(playingUsers[sessionID].questions.minimalquestionsList[playingUsers[sessionID].questions.currentQuestion])
     })
   } else {
@@ -295,10 +289,19 @@ app.post('/validateanswer', (request, response) => {
       questionsObject.currentQuestion,
       request.body.chosenAnswer
     )
+
+    playingUsers[sessionID].currentReview.push([
+      questionsObject.questionsList[questionsObject.currentQuestion].question,
+      questionsObject.questionsList[questionsObject.currentQuestion][`option${questionsObject.questionsList[questionsObject.currentQuestion].answers}`]
+    ])
     response.send(result)
   } else {
     response.send(403)
   }
+})
+app.post('/review', (request, response) => {
+  let sessionID = request.session.id.toString()
+  response.send(playingUsers[sessionID].currentReview)
 })
 /**
  * @desc Function sends get request to render about.hbs page, successful responce renders the page
@@ -320,6 +323,10 @@ app.get('/register', (request, response) => {
 
 app.get('/profile', (request, response) => {
   response.render('profile.hbs')
+})
+
+app.get('/review', (request, response) => {
+  response.render('review.hbs')
 })
 
 /**
@@ -372,7 +379,6 @@ app.post('/register', (request, response) => {
 
   userAccount.validateUsername(USERNAME).then((result) => {
     if (result && userAccount.regexPassword(PASSWORD) && PASSWORD === CPASSWORD) {
-      console.log('validation passed')
       userAccount.register(USERNAME, PASSWORD).then((finalResult) => {
         response.send(finalResult)
       })

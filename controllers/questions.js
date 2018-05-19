@@ -64,7 +64,8 @@ class Questions {
       }
       return {
         'result': true,
-        'currentUser': userObject.toJSON()
+        'currentUser': userObject.toJSON(), 
+        'answer': this.questionsList[questionNumber][`option${this.questionsList[questionNumber].answers}`]
       }
     } else {
       if (questionNumber >= 10){
@@ -74,10 +75,11 @@ class Questions {
       }
       return {
         'result': false,
-        'currentUser': userObject.toJSON()
-      }
+        'currentUser': userObject.toJSON(),
+        'answer': this.questionsList[questionNumber][`option${this.questionsList[questionNumber].answers}`]
     }
   }
+}
 
   /**
    * @deprecated using a database now
@@ -87,8 +89,8 @@ class Questions {
   storeQuizResult (userObject) {
     let date = new Date()
     let timeStamp = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-
-    user.storeUser(userObject.username, userObject.currentScore.userScore, userObject.currentScore.highestStreak, timeStamp)
+    return timeStamp
+    //user.storeUser(userObject.username, userObject.currentScore.userScore, userObject.currentScore.highestStreak, timeStamp)
   }
 }
 

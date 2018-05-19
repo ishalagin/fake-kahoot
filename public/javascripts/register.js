@@ -119,13 +119,23 @@ document.getElementById('signUpBoxCreateButton').addEventListener('click', funct
       swal({
         title: 'Success',
         text: 'Registration successful!',
-        icon: 'success'
+        type: 'success',
+        showConfirmButton: false,
+        timer: 1000
       })
+      signUpBoxUsernameInput.value = ''
+      signUpBoxPasswordInput.value = ''
+      signUpBoxConfirmPasswordInput.value = ''
+      document.getElementById('nameValidationIcon').src = ''
+      document.getElementById('cpasswordValidationIcon').src = ''
+      document.getElementById('passwordValidationIcon').src = ''
     } else {
       swal({
         title: 'Failed',
         text: 'Registration failed!',
-        icon: 'error'
+        type: 'error',
+        showConfirmButton: false,
+        timer: 1000
       })
     }
   }

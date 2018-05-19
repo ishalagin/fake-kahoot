@@ -11,13 +11,14 @@ let createQuestion = (Q, CA, WA1, WA2, WA3, userID) => {
       "WRONG_ANSWER3",
       "ACCOUNT_ID"
       ) VALUES (
-      '${Q}',
-      '${CA}',
-      '${WA1}',
-      '${WA2}',
-      '${WA3}',
-      ${userID}
-      );`).then((result) => {
+      $1,
+      $2,
+      $3,
+      $4,
+      $5,
+      $6
+      );`,[Q, CA, WA1, WA2, WA3, userID]
+      ).then((result) => {
         resolve(true)
       })
     } else {

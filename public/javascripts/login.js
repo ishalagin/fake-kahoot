@@ -21,6 +21,7 @@ let showLoginWindow = () => {
     overlayWindow.style.backgroundColor = 'rgba(236, 239, 241, 0.5)'
     loginWrap.style.top = '50vh'
   }, 10)
+  loginInputUsername.focus()
 }
 
 let login = () => {
@@ -28,17 +29,19 @@ let login = () => {
     serverRequest('POST', '/login', `username=${loginInputUsername.value}&password=${loginInputPassword.value}`, (xmlhttp) => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         swal({
-          title: 'Success',
-          text: 'Login successful!',
-          icon: 'success'
+          type: 'success',
+          title: 'Login successful!',
+          showConfirmButton: false,
+          timer: 1000
         }).then((value) => {
           window.location.reload()
         })
       } else if (xmlhttp.readyState === 4 && xmlhttp.status === 406) {
         swal({
-          title: 'Failed',
-          text: 'Invalid username and password pair!',
-          icon: 'warning'
+          type: 'error',
+          title: 'Invalid username and password pair!',
+          showConfirmButton: false,
+          timer: 1000
         })
       }
     })

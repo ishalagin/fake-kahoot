@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fakoot</title>
+    {{> head}}
+    <link rel="stylesheet" type="text/css" href="styles/index.css">
+    <link rel="stylesheet" type="text/css" href="styles/general.css">
+    <link rel="stylesheet" type="text/css" href="styles/review.css">
+
+</head>
+<body>
+    {{> menu}}
+    <div id="content">
+        <div class="background" id="contentBackground"></div>
+        <div class="card" id="displaybox"></div>
+        <div id="greetBoxStartButtonWrap">
+            <div class="cards buttons reviewButtons" id="reviewButtonReplay" onclick="window.location='/'">REPLAY</div>
+            <div class="cards buttons reviewButtons" id="reviewButtonViewLeaderboard" onclick="window.location='/leaderboard'">LEADBOARD</div>
+        </div>      
+    </div>
+    <script src="javascripts/review.js"></script>
+</body>
+</html>

@@ -18,7 +18,7 @@ class Account {
    */
   login (username, password) {
     return new Promise((resolve, reject) => {
-      db.executeQuery(`SELECT * FROM public."ACCOUNTS" WHERE "USERNAME" = '${username}';`).then((queryResult) => {
+      db.executeQuery(`SELECT * FROM public."ACCOUNTS" WHERE "USERNAME" = $1;`, [username]).then((queryResult) => {
         let result = JSON.parse(queryResult)
         if (result.length > 0 && bcrypt.compareSync(password, result[0].PASSWORD)) {
           this.username = result[0].USERNAME
@@ -53,7 +53,10 @@ class Account {
   register (username, password) {
     return new Promise((resolve, reject) => {
       this.encryptPassword(password).then((result) => {
-        db.executeQuery(`INSERT INTO public."ACCOUNTS"("USERNAME", "PASSWORD") VALUES ('${username}', '${result}');`).then((result) => {
+        db.executeQuery(`INSERT INTO public."ACCOUNTS"("USERNAME", "PASSWORD")
+         VALUES ($1, $2);`,
+         [username, result])
+        .then((result) => {
           resolve(result)
         })
       })
@@ -72,7 +75,7 @@ class Account {
     return new Promise((resolve, reject) => {
       let date = new Date()
       let timeStamp = `${date.toLocaleDateString()} ${date.toLocaleTimeString('en-CA')}`
-      console.log(this)
+      //console.log(this)
       db.executeQuery(
         `INSERT INTO public."SCORES" (
         "ACCOUNT_ID",
@@ -80,11 +83,14 @@ class Account {
         "HIGHEST_STREAK",
         "DATE"
         ) VALUES (
-        '${this.userID}',
-        '${this.currentScore.userScore}',
-        '${this.currentScore.highestStreak}',
-        '${timeStamp}'
-        )`
+        $1,
+        $2,
+        $3,
+        $4)`,
+        [this.userID,
+         this.currentScore.userScore,
+         this.currentScore.highestStreak,
+         timeStamp]
       ).then((result) => {
         resolve(result)
       }).catch((error) => {
