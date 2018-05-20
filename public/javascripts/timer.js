@@ -25,6 +25,7 @@ var countDown = () => {
     startCountDownAt = 9
     clearInterval(timer)
     getNextQuestion()
+    displayNotification('timeup')
   }
 
   startCountDownAt -= 1

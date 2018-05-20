@@ -246,6 +246,7 @@ let displayNotification = (mode, answer) => {
   let thumbUp = 'url(/assets/images/icons/thumb-up.svg)'
   let thumbDown = 'url(/assets/images/icons/dislike.svg)'
   let beer = 'url(/assets/images/icons/beer.svg)'
+  let time_up = 'url(/assets/images/icons/sand-clock.svg)'
   if (mode === 'wrong') {
     notifyTitle.innerHTML = '<div> Wrong! Right Answer Is\n' + answer + '</div>'
     document.getElementById('tooltip').style.backgroundImage = thumbDown
@@ -255,6 +256,9 @@ let displayNotification = (mode, answer) => {
   } else if (mode === 'beer') {
     notifyTitle.innerHTML = 'Good Luck!!!'
     document.getElementById('tooltip').style.backgroundImage = beer
+  }else if (mode === 'timeup') {
+    notifyTitle.innerHTML = 'Time Up!!!'
+    document.getElementById('tooltip').style.backgroundImage = time_up
   }
 }
 
