@@ -1,6 +1,6 @@
 #wrap {
     height: 20vh;
-    width: 40vw;
+    width: 30vw;
     bottom:0;
     right:0;
     position: absolute;
@@ -23,11 +23,13 @@
 
 #notify_title {
     position: absolute;
+    box-sizing: border-box;
     height: 16vh;
-    width: calc(40vw - 20vh);
+    width: calc(30vw - 20vh);
     top: 50%;
     left: 17vh;
     margin: -8vh 0 0 0;
+    padding: 0 0.5em;
     text-align: center;
     line-height: 18vh;
     color: var(--light-font-color);
