@@ -94,7 +94,7 @@ a {
 }
 
 ::-webkit-scrollbar {
-    width: 0.4em;
+    width: 0.2em;
     background: rgba(69,90,100 ,1);
 }
 

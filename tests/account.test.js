@@ -183,8 +183,6 @@ describe('validateUsername() tests', () => {
     for (let i = 0; i < testUsername.length; i++) {
       await accInst.validateUsername(testUsername[i]).then(result => {
         expect(result).toBeFalsy()
-      }).catch(error => {
-        expect(error.message).toBe('Bad Username')
       })
     }
   })

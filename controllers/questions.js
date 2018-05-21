@@ -1,36 +1,69 @@
 const opentdb = require('../models/opentdb')
-const user = require('../models/users')
+const users = require('../models/users')
 const pointPerQuestion = 500
 const streakBonus = 200
 
 /**
- *
+ * @class
  */
 class Questions {
   /**
+   * @summary Create an instance of a Questions
+   * @name Questions
+   * @class
+   * @public
    *
+   * @member {Object} this.questionsList - An array of questions
+   * @member {Object} this.minimalQuestionsList - An array of questions with the
+   * answer removed
+   * @member {Number} this.currentQuestion - Variable that stores the current
+   * question the quiz is on.
+   *
+   * @example
+   * const quiz = new Questions()
+   * quiz.getQuestions()
    */
   constructor () {
     this.questionsList = []
-    this.minimalquestionsList = []
+    this.minimalQuestionsList = []
     this.currentQuestion = 0
   }
 
   /**
-   * Gets a list of questions with the answer property removed.
-   * @param numberofQuestions
-   * @param category
-   * @param difficulty
-   * @param questionType
+   * @summary Gets a list of questions with the answer property removed.
+   * Also, stores an array of questions with the answer kept on the backend
+   * @method
+   * @public
+   *
+   * @param numberOfQuestions - Amount of questions received from API
+   * @param category - Quiz Category type
+   * @param difficulty - Quiz difficulty
+   * @param questionType - To determine if it is multiple choice type questions
+   * or True/False type questions
+   *
    * @returns {Promise<any>}
+   * @resolves {Object} An object with only the question and it's choices
+   *
+   * @example
+   * const quiz = new Questions()
+   * quiz.getQuestions()
    */
-  getQuestions (numberofQuestions = '10', category = '11', difficulty = 'medium', questionType = 'multiple') {
+  getQuestions (
+    numberOfQuestions = '10',
+    category = '11',
+    difficulty = 'medium',
+    questionType = 'multiple') {
     return new Promise((resolve, reject) => {
-      opentdb.getQuestions(numberofQuestions, category, difficulty, questionType).then((result) => {
+      opentdb.getQuestions(
+        numberOfQuestions,
+        category,
+        difficulty,
+        questionType
+      ).then((result) => {
         this.questionsList = result
-        this.minimalquestionsList = []
-        for (let i = 0; i < result.length; i++) {
-          this.minimalquestionsList.push({
+        this.minimalQuestionsList = []
+        for (let i = 0; i < this.questionsList.length; i++) {
+          this.minimalQuestionsList.push({
             'index': i,
             'question': result[i].question,
             'option1': result[i].option1,
@@ -39,32 +72,53 @@ class Questions {
             'option4': result[i].option4
           })
         }
-        resolve(this.minimalquestionsList)
+        resolve(this.minimalQuestionsList)
+      }).catch(error => {
+        reject(error)
       })
     })
   }
 
   /**
-   * assessQuestionResult checks if user made the right choice by looking at the answer stored server-side.
-   * @param userObject Object that contains current user's data including username, score, streak, etc.
-   * @param questionNumber The current question to be assessed.
-   * @param chosenAnswer The choice made by the user for the current question.
-   * @returns {{result: boolean, currentUser: *}} Object dictating whether the answer if right or wrong and the current user's data.
+   * @summary checks if user made the right choice by looking at the
+   * @method
+   * @public
+   *
+   * @param userObject - Object that contains current user's data including
+   * username, score, streak, etc.
+   * @param questionNumber - The current question to be assessed.
+   * @param chosenAnswer - The choice made by the user for the current question.
+   * @return {{result: boolean, currentUser: *}} Object dictating whether the
+   * answer if right or wrong and the current user's data.
+   *
+   * @example
+   * const quiz = new Questions()
+   * let userObject = {
+   * 'username': 'exampleName'
+   * 'userID': 'idOfUser',
+   * 'currentScore': {
+   *    'userScore': 0,
+   *    'currentStreak': 5,
+   *    'highestStreak': 10
+   *    }
+   * quiz.assessQuestionResult(userObject, 5, 5)
    */
   assessQuestionResult (userObject, questionNumber, chosenAnswer) {
+    let currentScore = userObject.currentScore
     if (this.questionsList[questionNumber].answers === Number(chosenAnswer)) {
       if (questionNumber >= 10){
-        userObject.currentScore.userScore = userObject.currentScore.userScore*2
+        currentScore.userScore = currentScore.userScore * 2
       } else {
-        userObject.currentScore.userScore += pointPerQuestion + streakBonus * userObject.currentScore.currentStreak
-        userObject.currentScore.currentStreak++
-        if (userObject.currentScore.currentStreak > userObject.currentScore.highestStreak) {
-          userObject.currentScore.highestStreak = userObject.currentScore.currentStreak
+        currentScore.userScore +=
+          pointPerQuestion + streakBonus * currentScore.currentStreak
+        currentScore.currentStreak++
+        if (currentScore.currentStreak > currentScore.highestStreak) {
+          currentScore.highestStreak = currentScore.currentStreak
         }
       }
       return {
         'result': true,
-        'currentUser': userObject.toJSON(), 
+        'currentUser': userObject.toJSON(),
         'answer': this.questionsList[questionNumber][`option${this.questionsList[questionNumber].answers}`]
       }
     } else {
@@ -77,20 +131,26 @@ class Questions {
         'result': false,
         'currentUser': userObject.toJSON(),
         'answer': this.questionsList[questionNumber][`option${this.questionsList[questionNumber].answers}`]
+      }
     }
   }
-}
 
   /**
-   * @deprecated using a database now
-   * storeQuizResult store current user results with date, score, streak, username to the database
-   * @param userObject Current user who played the game
+   * @summary Stores the quiz result for the user to ./models/users_data.json
+   * @method
+   * @public
+   * @deprecated
+   *
+   * @param userObject - Object that holds user information for quiz
+   *
+   * @example
+   * const quiz = new Questions()
+   * quiz.storeQuizResult(userObject)
    */
   storeQuizResult (userObject) {
     let date = new Date()
-    let timeStamp = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+    let timeStamp = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
     return timeStamp
-    //user.storeUser(userObject.username, userObject.currentScore.userScore, userObject.currentScore.highestStreak, timeStamp)
   }
 }
 

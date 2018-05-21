@@ -33,7 +33,7 @@ describe('Testing methods in Question Class', () => {
     instanceQuestions.getQuestions().then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 1)).toEqual({
-        answer: instanceQuestions.questionsList[1][`option${1}`], 
+        answer: instanceQuestions.questionsList[1][`option${1}`],
         result: true,
         currentUser: instanceUser
       })
@@ -46,7 +46,7 @@ describe('Testing methods in Question Class', () => {
     instanceQuestions.getQuestions().then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 2)).toEqual({
-        answer: instanceQuestions.questionsList[1][`option${1}`], 
+        answer: instanceQuestions.questionsList[1][`option${1}`],
         result: false,
         currentUser: instanceUser
       })
@@ -61,7 +61,7 @@ describe('Testing methods in Question Class', () => {
         'question': 'Hello',
         'option1': 'World',
         'option2': 'Hello',
-        'option3':'Again',
+        'option3': 'Again',
         'option4': '!',
         'answers': 1
       }
@@ -70,7 +70,7 @@ describe('Testing methods in Question Class', () => {
       expect(instanceUser.currentScore.userScore === 1000).toBe(true)
     })
   })
-  test('test storeQuizResult', async() => {
+  test('test storeQuizResult', async () => {
     let instanceQuestions = new questions.Questions()
     let instanceUser = new account.Account()
     let instanceUsers = new usersM.Users()

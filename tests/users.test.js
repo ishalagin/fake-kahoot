@@ -29,14 +29,12 @@ afterAll(() => {
   }
 })
 
-
 /**
  * If beforeEach is inside a describe block, it runs for each test in the describe block.
  */
 beforeEach(() => {
   userInst = new usersM.User()
   usersInst = new usersM.Users('./mine/users_data.json')
-
 })
 
 /**

@@ -9,7 +9,8 @@ let answer2 = document.getElementById('answer2')
 let answer3 = document.getElementById('answer3')
 let answer4 = document.getElementById('answer4')
 let userName = document.getElementById('greetBoxUsernameInput')
-let greetBoxPlayAsGuestButton = document.getElementById('greetBoxPlayAsGuestButton')
+let greetBoxPlayAsGuestButton = document
+  .getElementById('greetBoxPlayAsGuestButton')
 let greetBoxPlayButton = document.getElementById('greetBoxPlayButton')
 let popupWrap = document.getElementById('popupWrap')
 let popupMessageUsername = document.getElementById('popupMessageUsername')
@@ -22,7 +23,15 @@ let questionType = document.getElementById('trivia_category')
 let questionDiff = document.getElementById('trivia_difficulty')
 
 let currentQuestion = {}
-let userObject = {}
+let userObject = {
+  userName: '',
+  userID: '',
+  currentScore: {
+    userScore: 0,
+    currentStreak: 0,
+    highestStreak: 0
+  }
+}
 
 let InitialScript = () => {
   checkLoginStatus((status) => {
@@ -39,19 +48,22 @@ let InitialScript = () => {
 }
 
 let assessQuestionResult = (chosenAnswer) => {
-  serverRequest('POST', '/validateanswer', `chosenAnswer=${chosenAnswer}`, (xmlhttp) => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      let xmlhttpResult = JSON.parse(xmlhttp.responseText)
-      userObject = xmlhttpResult.currentUser
-      rightanswer = xmlhttpResult.answer
-      if (xmlhttpResult.result === true) {
-        displayNotification('right', rightanswer)
-      } else {
-        displayNotification('wrong', rightanswer)
+  serverRequest('POST',
+    '/validateanswer',
+    `chosenAnswer=${chosenAnswer}`,
+    (xmlhttp) => {
+      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        let xmlhttpResult = JSON.parse(xmlhttp.responseText)
+        userObject = xmlhttpResult.currentUser
+        let rightAnswer = xmlhttpResult.answer
+        if (xmlhttpResult.result === true) {
+          displayNotification('right', rightAnswer)
+        } else {
+          displayNotification('wrong', rightAnswer)
+        }
+        populatePopupResult()
       }
-      populatePopupResult()
-    }
-  })
+    })
 }
 
 let storeQuizResult = () => {
@@ -69,12 +81,14 @@ let storeQuizResult = () => {
 let play = () => {
   checkLoginStatus((status) => {
     if (status) {
-      if (questionType.options[questionType.selectedIndex].value !== '-1' && questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
+      if (questionType.options[questionType.selectedIndex].value !== '-1' &&
+        questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
         serverRequest('POST', '/play', '', (xmlhttp) => {
           if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             userObject = JSON.parse(xmlhttp.responseText)
             notifyTitle.innerHTML = `Welcome ${userObject.username}`
-            document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
+            document.getElementById('tooltip').style.backgroundImage =
+              'url(/assets/images/icons/puzzle.svg)'
             userObject = JSON.parse(xmlhttp.responseText)
             startTrivia()
           }
@@ -82,26 +96,27 @@ let play = () => {
       } else {
         swal('Error!', 'Please fill out everything!', 'warning')
       }
-    } else {
-      // swal('Error!', 'Unexpected request!\nPlease reload the page', 'warning')
     }
   })
 }
 
 /**
- *
- * @param {number} - ????
+ * Allows a user to play without logging in.
+ * @param event
  */
 let playAsGuest = (event = 1) => {
   checkLoginStatus((status) => {
     if (!status) {
       if (event === 1 || event.keyCode === 13) {
-        if (userName.value !== '' && questionType.options[questionType.selectedIndex].value !== '-1' && questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
+        if (userName.value !== '' &&
+          questionType.options[questionType.selectedIndex].value !== '-1' &&
+          questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
           serverRequest('POST', '/playAsGuest', `username=${userName.value}`, (xmlhttp) => {
             if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
               userObject = JSON.parse(xmlhttp.responseText)
               notifyTitle.innerHTML = `Welcome ${userObject.username}`
-              document.getElementById('tooltip').style.backgroundImage = 'url(/assets/images/icons/puzzle.svg)'
+              document.getElementById('tooltip').style.backgroundImage =
+                  'url(/assets/images/icons/puzzle.svg)'
               userObject = JSON.parse(xmlhttp.responseText)
               startTrivia()
             }
@@ -117,14 +132,16 @@ let playAsGuest = (event = 1) => {
 }
 
 /**
- * @desc Displays the current user's name to the popup message Username along with their current Score and Highest Streak
- *
+ * @desc Displays the current user's name to the popup message Username along
+ * with their current Score and Highest Streak
  */
 let populatePopupResult = () => {
   popupMessageUsername.innerHTML = userObject.username
   popupMessageScore.innerHTML = `SCORE: ${userObject.currentScore.userScore}`
-  popupMessageStreak.innerHTML = `HIGHEST STREAK: ${userObject.currentScore.highestStreak}`
+  popupMessageStreak.innerHTML =
+    `HIGHEST STREAK: ${userObject.currentScore.highestStreak}`
 }
+
 /**
  * @desc function displays the next question or the result when the game is over
  */
@@ -196,7 +213,10 @@ let playBonus = () => {
 }
 
 /**
- * @desc Opens new HTTP request and looks for POST "/getquestions", if there is a state change, then it will parse into a JSON object which is displayed back to the user in the greet Box which only shows for 0.3 seconds then dissapears. Send quiz category and difficulty value to back end.
+ * @desc Opens new HTTP request and looks for POST "/getquestions", if there is
+ * a state change, then it will parse into a JSON object which is displayed back
+ * to the user in the greet Box which only shows for 0.3 seconds then
+ * disappears. Send quiz category and difficulty value to back end.
  */
 let startTrivia = () => {
   serverRequest('POST', '/starttrivia', `chosenType=${questionType.options[questionType.selectedIndex].value}&chosenDiff=${questionDiff.options[questionDiff.selectedIndex].value}`, (xmlhttp) => {
@@ -223,7 +243,8 @@ let displayQuestion = () => {
     notification.style.right = '0'
   }, 1)
   setTimeout(() => {
-    userInfo.innerHTML = `${userObject.username} - ${userObject.currentScore.userScore}`
+    userInfo.innerHTML = `${userObject.username} - 
+    ${userObject.currentScore.userScore}`
     questionNumber.innerHTML = 'QUESTION ' + (currentQuestion.index + 1)
     questionContent.innerHTML = currentQuestion.question
     answer1.innerHTML = currentQuestion.option1
@@ -256,7 +277,7 @@ let displayNotification = (mode, answer) => {
   } else if (mode === 'beer') {
     notifyTitle.innerHTML = 'Good Luck!!!'
     document.getElementById('tooltip').style.backgroundImage = beer
-  }else if (mode === 'timeup') {
+  } else if (mode === 'timeup') {
     notifyTitle.innerHTML = 'Time Up!!!'
     document.getElementById('tooltip').style.backgroundImage = time_up
   }

@@ -18,7 +18,10 @@ let getQuestionByCategory = (categoryID, page = 0, limit = 10) => {
 
   return new Promise((resolve, reject) => {
     request({
-      url: `https://qriusity.com/v1/categories/${encodeURIComponent(categoryID.toString())}/questions?page=${encodeURIComponent(page.toString())}&limit=${encodeURIComponent(limit.toString())}`,
+      url: `https://qriusity.com/v1/categories/
+      ${encodeURIComponent(categoryID.toString())}/questions?
+      page=${encodeURIComponent(page.toString())}&
+      limit=${encodeURIComponent(limit.toString())}`,
       json: true
     }, (error, response, body) => {
       if (error) {
@@ -41,7 +44,10 @@ let getQuestionByCategory = (categoryID, page = 0, limit = 10) => {
 let getQuestionsNewApi = (questionAmount, categoryType) => {
   return new Promise((resolve, reject) => {
     request({
-      url: `https://opentdb.com/api.php?amount=${encodeURIComponent(questionAmount)}&category=${encodeURIComponent(categoryType)}&type=multiple`,
+      url: `https://opentdb.com/api.php?
+      amount=${encodeURIComponent(questionAmount)}&
+      category=${encodeURIComponent(categoryType)}&
+      type=multiple`,
       json: true
     }, (error, response, body) => {
       if (error) {
@@ -55,7 +61,8 @@ let getQuestionsNewApi = (questionAmount, categoryType) => {
 
 /**
  * Exports modules
- * @type {{getQuestionByCategory: function(*, *=, *=): Promise<any>, getQuestionsNewApi: function(*=, *=): Promise<any>}}
+ * @type {{getQuestionByCategory: function(*, *=, *=): Promise<any>,
+ * getQuestionsNewApi: function(*=, *=): Promise<any>}}
  */
 module.exports = {
   getQuestionByCategory,

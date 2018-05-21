@@ -86,7 +86,8 @@ nameIcon.addEventListener('mouseover', function () {
 
 passwordIcon.addEventListener('mouseover', function () {
   if (passwordIcon.getAttribute('src') === '/assets/images/icons/cross.svg') {
-    hintWrap.innerHTML = 'Password must be a minimum of six characters and include at least one uppercase letter, one lowercase letter, and one number. '
+    hintWrap.innerHTML = 'Password must be a minimum of six characters and' +
+      ' include at least one uppercase letter, one lowercase letter, and one number. '
     hintWrap.style.display = 'block'
   }
 })
@@ -139,5 +140,7 @@ document.getElementById('signUpBoxCreateButton').addEventListener('click', funct
       })
     }
   }
-  xmlhttp.send(`USERNAME=${userNameInput.value}&PASSWORD=${passwordInput.value}&CPASSWORD=${cpasswordInput.value}`)
+  xmlhttp.send(`USERNAME=${userNameInput.value}&
+  PASSWORD=${passwordInput.value}&
+  CPASSWORD=${cpasswordInput.value}`)
 })

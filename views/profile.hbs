@@ -10,8 +10,9 @@
     </head>
     <body>
         {{> menu}}
-        {{> createQuestion}}
         <div id="content">
+            {{> createQuestion}}
+            {{> profile}}
             <div class="background" id="contentBackground"></div>
             <div id="createQuestionButton" class="cards buttons" onclick="showCreateQuestionWindow()">Create Question</div>
         </div>

@@ -37,7 +37,7 @@ test('Test if createQuestion validation works (empty input)', async () => {
     'Maksym',
     0
   ).then(result => {
-    expect(result).toEqual(false)
+    expect(result).toBeFalsy()
   }).catch(error => {
     console.log(error)
   })
@@ -52,7 +52,7 @@ test('Test if createQuestion validation works (same answers)', async () => {
     'Maksym',
     0
   ).then(result => {
-    expect(result).toEqual(false)
+    expect(result).toBeFalsy()
   }).catch(error => {
     console.log(error)
   })
@@ -61,7 +61,7 @@ it('should ', () => {
   db.executeQuery(
     `SELECT * FROM public."ACCOUNTS";`
   ).then(res1 => {
-    console.log(res1)
+    expect(res1).toBeTruthy()
   })
 })
 
