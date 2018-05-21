@@ -7,9 +7,9 @@
     </head>
     <body>
         <div id="leaderboardInputWrap">
-            <select name="trivia_category" class="cards" id="ltrivia_category">
+            <select name="trivia_category" class="cards" id="ltrivia_category" onchange="displayQuizResultCateogry()">
                 <option value="0">Any Category</option>
-                <option value="9">General Knowledge</option>
+                <option value="9" selected>General Knowledge</option>
                 <option value="10">Books</option>
                 <option value="11">Film</option>
                 <option value="12">Music</option>
@@ -34,11 +34,11 @@
                 <option value="31">Japanese Anime &amp; Manga</option>
                 <option value="32">Cartoon &amp; Animations</option>
             </select>
-            <select name="trivia_difficulty" class="cards" id="ltrivia_difficulty">
+            <select name="trivia_difficulty" class="cards" id="ltrivia_difficulty" onchange="displayQuizResultCateogry()">
 			    <option value="0">Any Difficulty</option>
-			    <option value="easy">Easy</option>
-			    <option value="medium">Medium</option>
-			    <option value="hard">Hard</option>
+			    <option value="1" selected>Easy</option>
+			    <option value="2">Medium</option>
+			    <option value="3">Hard</option>
 		    </select>
         </div>
         {{> menu}}
@@ -68,5 +68,6 @@
                 {{{list_of_user_data}}}
             </div>
         </div>
+        <script src="javascripts/leaderboard.js"></script>
     </body>
 </html>
