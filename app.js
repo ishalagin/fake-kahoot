@@ -184,6 +184,7 @@ app.post('/storeuser', (request, response) => {
  *
  * @response {Object} Sends Account class attributes of guest user to this path
  */
+
 app.post('/playAsGuest', (request, response) => {
   let sessionID = request.session.id.toString()
   let newUser = new account.Account(request.body.username)
