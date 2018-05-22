@@ -4,6 +4,8 @@ let scoreDisplay = document.getElementById('scoreDisplay')
 
 let displayQuizResultCateogry = () => {
     serverRequest('POST', '/leaderboardCategory', `chosenCateogry=${categoryType.options[categoryType.selectedIndex].value}&chosenDifficulty=${difficultyType.options[difficultyType.selectedIndex].value}`, (xmlhttp) => {
+        console.log(categoryType.options[categoryType.selectedIndex].value)
+        console.log(difficultyType.options[difficultyType.selectedIndex].value)
         if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
             scoreDisplay.innerHTML = '<div class="scoreDisplayRow scoreDisplayRowHeader">\n' +
                 '<div id="userRank" class="leaderboardDisplayColumn">\n' +
@@ -22,7 +24,7 @@ let displayQuizResultCateogry = () => {
                 '<p class="displayInfo">DATE</p>\n' +
                 '</div>\n' +
                 '</div>\n'
-            console.log(scoreDisplay.innerHTML)
+            // console.log(scoreDisplay.innerHTML)
             scoreDisplay.innerHTML += xmlhttp.responseText
         }
     })
