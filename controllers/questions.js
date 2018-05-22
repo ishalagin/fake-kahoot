@@ -37,11 +37,12 @@ class Questions {
    * @method
    * @public
    *
-   * @param numberOfQuestions - Amount of questions received from API
+   * @param amount - Amount of questions received from API
    * @param category - Quiz Category type
    * @param difficulty - Quiz difficulty
    * @param questionType - To determine if it is multiple choice type questions
    * or True/False type questions
+   * @param sessionToken
    *
    * @returns {Promise<any>}
    * @resolves {Object} An object with only the question and it's choices
@@ -51,13 +52,15 @@ class Questions {
    * quiz.getQuestions()
    */
   getQuestions (
-    numberOfQuestions = '10',
-    category = '11',
-    difficulty = 'medium',
+    sessionToken,
+    amount = 10,
+    category = 15,
+    difficulty = 'easy',
     questionType = 'multiple') {
     return new Promise((resolve, reject) => {
       opentdb.getQuestions(
-        numberOfQuestions,
+        sessionToken,
+        amount,
         category,
         difficulty,
         questionType

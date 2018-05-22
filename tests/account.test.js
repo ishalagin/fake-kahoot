@@ -7,13 +7,10 @@ beforeAll(() => {
   return undefined
 })
 
-afterAll(() => {
-  db.executeQuery(`DELETE FROM public."ACCOUNTS" WHERE "USERNAME" IN (
-  'jestUser1',
-  'tester1',
-  'tester2',
-  'tester3'
-  );`)
+afterAll(async () => {
+  await db.executeQuery(
+    `DELETE FROM public."ACCOUNTS" WHERE "USERNAME" IN ($1, $2, $3, $4);`,
+    ['jestUser1', 'tester1', 'tester2', 'tester3'])
 })
 
 beforeEach(() => {

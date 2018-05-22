@@ -53,11 +53,11 @@ let createQuestion = () => {
   serverRequest(
     'POST',
     '/createQuestion',
-    `questionContent=${questionInput.value}&
-    rightAnswer=${correctAnswerInput.value}&
-    wrongAnswer1=${wrongAnswerInput1.value}&
-    wrongAnswer2=${wrongAnswerInput2.value}&
-    wrongAnswer3=${wrongAnswerInput3.value}`,
+    `questionContent=${questionInput.value}&` +
+    `rightAnswer=${correctAnswerInput.value}&` +
+    `wrongAnswer1=${wrongAnswerInput1.value}&` +
+    `wrongAnswer2=${wrongAnswerInput2.value}&` +
+    `wrongAnswer3=${wrongAnswerInput3.value}`,
     (xmlhttp) => {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
         swal({

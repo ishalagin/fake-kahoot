@@ -2,13 +2,20 @@
 const usersM = require.requireActual('../models/users')
 const questions = require.requireActual('../controllers/questions')
 const account = require.requireActual('../models/account')
+const opentdb = require.requireActual('../models/opentdb')
+
 let instanceQuestions
 let instanceUser
 let instanceUsers
-beforeAll(() => {
+let tokenID
+
+beforeAll(async () => {
   instanceQuestions = new questions.Questions()
   instanceUser = new account.Account()
   instanceUser = new account.Account()
+  await opentdb.retrieveToken().then(token => {
+    tokenID = token
+  })
 })
 
 afterAll(() => {
@@ -25,7 +32,7 @@ afterEach(() => {
 
 describe('Testing methods in Question Class', () => {
   test('Testing assessQuestionResult; Answer True', () => {
-    instanceQuestions.getQuestions().then(data => {
+    instanceQuestions.getQuestions(tokenID).then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 1))
         .toEqual({
@@ -37,7 +44,7 @@ describe('Testing methods in Question Class', () => {
   })
 
   test('Testing assessQuestionResult; Answer False', () => {
-    instanceQuestions.getQuestions().then(data => {
+    instanceQuestions.getQuestions(tokenID).then(data => {
       instanceQuestions.questionsList[1].answers = 1
       expect(instanceQuestions.assessQuestionResult(instanceUser, 1, 2))
         .toEqual({
@@ -50,7 +57,7 @@ describe('Testing methods in Question Class', () => {
 
   test('test double the user score if the answer to bonus question is correct',
     async () => {
-      instanceQuestions.getQuestions().then(data => {
+      instanceQuestions.getQuestions(tokenID).then(data => {
         instanceQuestions.questionsList[10] = {
           'question': 'Hello',
           'option1': 'World',
@@ -64,22 +71,25 @@ describe('Testing methods in Question Class', () => {
         expect(instanceUser.currentScore.userScore === 1000).toBe(true)
       })
     })
+
   test('test storeQuizResult', async () => {
     expect(typeof instanceQuestions.storeQuizResult(instanceUsers))
       .toBe('string')
   })
 })
 
-test('test getQuestions', async () => {
-  let testStructure = {
-    index: expect.anything(),
-    question: expect.anything(),
-    option1: expect.anything(),
-    option2: expect.anything(),
-    option3: expect.anything(),
-    option4: expect.anything()
-  }
-  await instanceQuestions.getQuestions().then(data => {
-    expect(data[0]).toEqual(testStructure)
+describe('GetQuestions()', () => {
+  test('test getQuestions', async () => {
+    let testStructure = {
+      index: expect.anything(),
+      question: expect.anything(),
+      option1: expect.anything(),
+      option2: expect.anything(),
+      option3: expect.anything(),
+      option4: expect.anything()
+    }
+    await instanceQuestions.getQuestions(tokenID).then(data => {
+      expect(data[0]).toEqual(testStructure)
+    })
   })
 })
