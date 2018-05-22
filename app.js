@@ -5,7 +5,6 @@ const express = require('express')
 const hbs = require('hbs')
 const bodyParser = require('body-parser')
 const _ = require('lodash')
-const users = require('./models/users')
 const questions = require('./controllers/questions')
 
 const score = require('./models/score')
@@ -156,7 +155,9 @@ app.post('/storeuser', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID)) {
     if (playingUsers[sessionID].user !== undefined &&
       playingUsers[sessionID].user.userID !== undefined) {
-      playingUsers[sessionID].user.saveCurrentScore().then(result => {
+      playingUsers[sessionID].user.saveCurrentScore(
+        playingUsers[sessionID].questions.categoryID,
+        playingUsers[sessionID].questions.difficultyID).then(result => {
         response.sendStatus(201)
       }).catch(error => {
         response.sendStatus(400)
@@ -212,10 +213,7 @@ app.post('/play', (request, response) => {
  * for the leader board page
  */
 app.get('/leaderboard', (request, response) => {
-  let userList = new users.Users()
-  response.render('leaderboard.hbs', {
-    list_of_user_data: userList.displayTopUsers()
-  })
+  response.render('leaderboard.hbs')
 })
 
 /**
@@ -416,7 +414,12 @@ app.get('/about', (request, response) => {
  * @response {String} Filename of register.hbs file
  */
 app.get('/register', (request, response) => {
-  response.render('register.hbs')
+  let sessionID = request.session.id.toString()
+  if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
+    response.redirect('/')
+  } else {
+    response.render('register.hbs')
+  }
 })
 
 /**
@@ -431,16 +434,14 @@ app.get('/profile', (request, response) => {
   if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
     response.render('profile.hbs')
   } else {
-    response.send(403)
+    response.render('404.hbs')
   }
 })
 
 app.post('/playerhistory', (request, response) => {
   let sessionID = request.session.id.toString()
-  console.log('bye')
   if (Object.keys(playingUsers).includes(sessionID)) {
     playingUsers[sessionID].user.userPlayHistory().then((result) => {
-      console.log(result)
       response.send(result)
     })
   } else {

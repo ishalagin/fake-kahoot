@@ -27,6 +27,8 @@ class Questions {
     this.questionsList = []
     this.minimalQuestionsList = []
     this.currentQuestion = 0
+    this.categoryID = undefined
+    this.difficultyID = undefined
   }
 
   /**
@@ -72,6 +74,9 @@ class Questions {
             'option4': result[i].option4
           })
         }
+        this.categoryID = category
+        this.difficultyID = difficulty
+        console.log(this.categoryID, this.difficultyID)
         resolve(this.minimalQuestionsList)
       }).catch(error => {
         reject(error)

@@ -105,7 +105,7 @@ class Account {
    *
    * @return {Promise<any>}
    */
-  saveCurrentScore () {
+  saveCurrentScore (categoryID, difficultyID) {
     return new Promise((resolve, reject) => {
       let date = new Date()
       let timeStamp = `${date.toLocaleDateString('en-CA')} 
@@ -121,11 +121,15 @@ class Account {
         $1,
         $2,
         $3,
-        $4)`,
+        $4,
+        $5,
+        $6)`,
         [this.userID,
           this.currentScore.userScore,
           this.currentScore.highestStreak,
-          timeStamp]
+          timeStamp,
+          categoryID,
+          difficultyID]
       ).then((result) => {
         resolve(result)
       }).catch((error) => {
