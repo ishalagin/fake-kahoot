@@ -10,12 +10,7 @@ const questions = require('./controllers/questions')
 
 const score = require('./models/score')
 
-/**
- * @desc Import environment variable port module and assign port equal to 8080.
- * @type {*|number}
- */
 const port = process.env.PORT || 8080
-
 /**
  * @module app
  * @type {*|Function}
@@ -223,13 +218,22 @@ app.get('/leaderboard', (request, response) => {
   })
 })
 
+/**
+ * @summary sends the chosen category and difficulty to server to display
+ * the proper leaderboard
+ * @name Leaderboard Category
+ * @path {POST} /leaderboardCategory
+ *
+ * @response {Object} Leaderboard diffculty and category data
+ */
 app.post('/leaderboardCategory', (request, response) => {
   let newScore = new score.Score()
-  console.log('hi')
-  newScore.getLeaderboardStats(request.body.chosenCateogry, request.body.chosenDifficulty).then(result => {
-    console.log(result)
-    response.send(result)
-  })
+  newScore.getLeaderboardStats(
+    request.body.chosenCategory,
+    request.body.chosenDifficulty)
+    .then(result => {
+      response.send(result)
+    })
 })
 
 /**
@@ -266,6 +270,15 @@ app.post('/getnextquestion', (request, response) => {
   }
 })
 
+/**
+ * @summary Gets a double or nothing question from our database (user created)
+ * @name Get Bonus Question
+ * @path {POST} /getbonusquestion
+ *
+ * @code {204} Send success if current question is not 9
+ * @code {401} If there are not questions for the sessions send unauthorized
+ * @code {403} If there is no session ID on the server
+ */
 app.post('/getbonusquestion', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
@@ -296,7 +309,10 @@ app.post('/getbonusquestion', (request, response) => {
             'option4': playingUsers[sessionID].questions.questionsList[i].option4
           })
           playingUsers[sessionID].questions.currentQuestion++
-          response.send(playingUsers[sessionID].questions.minimalQuestionsList[playingUsers[sessionID].questions.currentQuestion])
+          let currQuestIdx = playingUsers[sessionID].questions.currentQuestion
+          response.send(
+            playingUsers[sessionID].questions.minimalQuestionsList[currQuestIdx]
+          )
         })
       } else {
         response.sendStatus(204)
@@ -310,10 +326,16 @@ app.post('/getbonusquestion', (request, response) => {
 })
 
 /**
- * @desc If user has session ID then create new question with chosen question
- * type, else sends 500 to indicate that an interal server error occured.
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @summary If user has session ID then create new question with chosen question
+ * type
+ * @name Start Trivia
+ * @path {POST} /starttrivia
+ *
+ * @body {String} chosenType API parameter for quiz content
+ * @body {String} chosenDiff API parameter for quiz difficulty
+ *
+ * @response Question object for the first question in the question list
+ * @code {403} Error Status sent if session key does not exist on server.
  */
 app.post('/starttrivia', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -322,7 +344,10 @@ app.post('/starttrivia', (request, response) => {
     playingUsers[sessionID].currentReview = []
     playingUsers[sessionID].questions = newQuestions
     let minQuestID = playingUsers[sessionID].questions.currentQuestion
-    newQuestions.getQuestions(10, request.body.chosenType, request.body.chosenDiff).then((result) => {
+    newQuestions.getQuestions(
+      10,
+      request.body.chosenType,
+      request.body.chosenDiff).then((result) => {
       response.send(
         playingUsers[sessionID].questions.minimalQuestionsList[minQuestID]
       )
@@ -333,12 +358,17 @@ app.post('/starttrivia', (request, response) => {
 })
 
 /**
- * @desc Function sends post request to the server, if user has session ID
+ * @summary sends post request to the server, if user has session ID
  * responds with result object, else responds with 400 to indicate that an error
  * occured
- * @param {Object} request - Node.js request object contains session data
- * @param {Object} response - Node.js response object, responds with
- * questionObject, or with 400 if error occurred
+ * @name Validate Answer
+ * @path {POST} /validateanswer
+ *
+ * @body {String} chosenAnswer The Id of the answer the user has chosen
+ *
+ * @response {Object} Returns the assesed question result to determine if the
+ * user chose the correct answer.
+ * @code {403} No session id match on server
  */
 app.post('/validateanswer', (request, response) => {
   let sessionID = request.session.id.toString()
@@ -351,10 +381,11 @@ app.post('/validateanswer', (request, response) => {
       questionsObject.currentQuestion,
       request.body.chosenAnswer
     )
-
+    let currIdx = questionsObject.currentQuestion
+    let answerIdx = `option${questionsObject.questionsList[currIdx].answers}`
     playingUsers[sessionID].currentReview.push([
-      questionsObject.questionsList[questionsObject.currentQuestion].question,
-      questionsObject.questionsList[questionsObject.currentQuestion][`option${questionsObject.questionsList[questionsObject.currentQuestion].answers}`]
+      questionsObject.questionsList[currIdx].question,
+      questionsObject.questionsList[currIdx][answerIdx]
     ])
     response.send(result)
   } else {
@@ -365,25 +396,36 @@ app.post('/review', (request, response) => {
   let sessionID = request.session.id.toString()
   response.send(playingUsers[sessionID].currentReview)
 })
+
 /**
- * @desc Function sends get request to render about.hbs page, successful
- * response renders the page
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @summary renders the about.hbs page
+ * @name About Page
+ * @path {GET} /about
+ *
+ * @response {String} Filename of about.hbs file
  */
 app.get('/about', (request, response) => {
   response.render('about.hbs')
 })
 
 /**
- * @desc Renders Sign Up page
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @summary Renders the register.hbs page
+ * @name Register
+ * @path {GET} /register
+ *
+ * @response {String} Filename of register.hbs file
  */
 app.get('/register', (request, response) => {
   response.render('register.hbs')
 })
 
+/**
+ * @summary renders the profile.hbs page
+ * @name Profile Page
+ * @path {GET} /profile
+ *
+ * @response {String} Filename of profile.hbs file
+ */
 app.get('/profile', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
@@ -406,25 +448,39 @@ app.post('/playerhistory', (request, response) => {
   }
 })
 
+/**
+ * @summary renders the review.hbs page
+ * @name Review Page
+ * @path {GET} /review
+ *
+ * @response {String} Filename of review.hbs file
+ */
 app.get('/review', (request, response) => {
   response.render('review.hbs')
 })
 
 /**
- * @desc If requested page is not found function renders 404 error page
- * @param {Object} request - Node.js request object
- * @param {Object} response - Node.js response object
+ * @summary If requested page is not found the 404 page will be rendered
+ * @name 404
+ * @path {GET} *
+ *
+ * @response {String} Filename of 404 page
  */
 app.get('*', (request, response) => {
   response.render('404.hbs')
 })
 
 /**
- * @desc Functions sends post request to the server containing username,
- * if username is valid responds with true, else responds with false
- * @param {Object} request - Node.js request object, contains username
- * @param {Object} response - Node.js response object, responds with true if
- * username is valid, else false
+ * @summary User inputted username gets tested by a regular expression and then
+ * is checked if it exists in the database
+ * @name Validate Username
+ * @path {POST} /validateusername
+ *
+ * @body {String} USERNAME Username string entered by the user to compare in DB
+ *
+ * @code {200} Successful if username exists in database
+ * @code {406} Not acceptable if username does not exist in database
+ * @code {406} Not acceptable if DB query fails
  */
 app.post('/validateusername', (request, response) => {
   let userAccount = new account.Account()
@@ -436,10 +492,20 @@ app.post('/validateusername', (request, response) => {
         response.sendStatus(406)
       }
     }).catch(error => {
-      response.sendStatus(406)
+      if (error) response.sendStatus(406)
     })
 })
 
+/**
+ * @summary Tests user inputted password to a regular expression
+ * @name Validate Password
+ * @path {POST} /validatepassword
+ *
+ * @body {String} PASSWORD Password string entered by the user to compare in DB
+ *
+ * @code {200} Successful if password pass regular expression testing
+ * @code {406} Not acceptable if password does not pass regular expression test
+ */
 app.post('/validatepassword', (request, response) => {
   let userAccount = new account.Account()
   let result = userAccount.regexPassword(request.body.PASSWORD.toString())
@@ -451,11 +517,19 @@ app.post('/validatepassword', (request, response) => {
 })
 
 /**
- * @desc Function sends post request to register user, responds with true
+ * @summary Function sends post request to register user, responds with true
  * for success, else with false
- * @param {Object} request - Node.js request object contains account data
- * @param {Object} response - Node.js response object, responds with true
- * for success, else with false
+ * @name Register User
+ * @path {POST} /register
+ *
+ * @body {String} USERNAME User inputted username
+ * @body {String} PASSWORD User inputted password
+ * @body {String} CPASSWORD Second password entry to confirm
+ *
+ * @response {Object} Account data
+ * @code {406} Not acceptable if Password is not the same as the second password
+ * entry to confirm
+ * @code {406} Not acceptable if RegEX does not pass
  */
 app.post('/register', (request, response) => {
   let USERNAME = request.body.USERNAME.toString()
@@ -483,6 +557,20 @@ app.post('/register', (request, response) => {
   })
 })
 
+/**
+ * @summary This route sends user inputted question data to the server
+ * @name Create Questions
+ * @path {POST} /createQuestion
+ *
+ * @body {String} questionContent
+ * @body {String} rightAnswer
+ * @body {String} wrongAnser1
+ * @body {String} wrongAnswer2
+ * @body {String} wrongAnswer3
+ *
+ * @code {200} Successful if createQuestion() inserts data into the database
+ * @code {406} Not acceptable if query fails
+ */
 app.post('/createQuestion', (request, response) => {
   let questionContent = request.body.questionContent.toString()
   let rightAnswer = request.body.rightAnswer.toString()
@@ -508,9 +596,6 @@ app.post('/createQuestion', (request, response) => {
   })
 })
 
-/**
- * @desc Function notifies port number of the local server
- */
 app.listen(port, () => {
   console.log(`Server is up on port 8080`)
 })

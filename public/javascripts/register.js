@@ -6,7 +6,15 @@ let nameIcon = document.getElementById('nameValidationIcon')
 let passwordIcon = document.getElementById('passwordValidationIcon')
 let cpasswordIcon = document.getElementById('cpasswordValidationIcon')
 let hintWrap = document.getElementById('hintWrap')
+/**
+ * @module
+ */
 
+/**
+ * @summary Sends username input to server
+ * @function
+ * @public
+ */
 userNameInput.addEventListener('blur', function () {
   let xmlhttp = new XMLHttpRequest()
   xmlhttp.open('POST', '/validateusername', true)
@@ -21,6 +29,11 @@ userNameInput.addEventListener('blur', function () {
   xmlhttp.send(`USERNAME=${userNameInput.value}`)
 })
 
+/**
+ * @summary Sends password input to server
+ * @function
+ * @public
+ */
 passwordInput.addEventListener('keyup', function () {
   let xmlhttp = new XMLHttpRequest()
   xmlhttp.open('POST', '/validatepassword', true)
@@ -45,6 +58,11 @@ passwordInput.addEventListener('keyup', function () {
   }
 })
 
+/**
+ * @summary Sends confirmation password input to server
+ * @function
+ * @public
+ */
 cpasswordInput.addEventListener('keyup', function () {
   if (passwordIcon.getAttribute('src') === '/assets/images/icons/checked.svg') {
     if (cpasswordInput.value === passwordInput.value) {

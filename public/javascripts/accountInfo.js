@@ -2,7 +2,17 @@ let accountUsername = document.getElementById('accountUsername')
 let accountMenuOptionProfile = document.getElementById('accountMenuOptionProfile')
 let accountMenuOptionLogin = document.getElementById('accountMenuOptionLogin')
 let accountMenuOptionLogout = document.getElementById('accountMenuOptionLogout')
+/**
+ * @module
+ */
 
+/**
+ * @summary HTTP request to get login status from server
+ * @function
+ * @public
+ *
+ * @param callback
+ */
 let checkLoginStatus = (callback = () => {}) => {
   serverRequest('POST', '/checkLoginStatus', '', (xmlhttp) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {

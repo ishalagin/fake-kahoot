@@ -15,8 +15,7 @@
     "exclude": [
       "./public/assets/",
       "./public/styles/",
-      "./node_modules/",
-      "./public/javascripts/timer.js"
+      "./node_modules/"
     ],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"

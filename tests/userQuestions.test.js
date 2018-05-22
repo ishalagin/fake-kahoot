@@ -3,14 +3,19 @@ const userQuestions = require.requireActual('../models/userQuestions')
 const db = require.requireActual('../models/database')
 
 beforeAll(async () => {
-  await db.executeQuery(`INSERT INTO public."ACCOUNTS" VALUES (0, 'test', 'test');`).then(result => {
-    return result
-  })
+  await db.executeQuery(
+    `INSERT INTO public."ACCOUNTS" VALUES (0, 'test', 'test');`)
+    .then(result => {
+      return result
+    })
 })
 
 afterAll(() => {
-  db.executeQuery(`DELETE FROM public."QUESTIONS" WHERE "QUESTION_CONTENT" = 'What is my name?';`)
-  db.executeQuery(`DELETE FROM public."ACCOUNTS" WHERE "USERNAME" = 'test';`)
+  db.executeQuery(
+    `DELETE FROM public."QUESTIONS" WHERE "QUESTION_CONTENT" = 
+    'What is my name?';`)
+  db.executeQuery(
+    `DELETE FROM public."ACCOUNTS" WHERE "USERNAME" = 'test';`)
 })
 
 test('Test if createQuestion works', async () => {

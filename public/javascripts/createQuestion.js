@@ -5,7 +5,15 @@ let correctAnswerInput = document.getElementById('correctAnswerInput')
 let wrongAnswerInput1 = document.getElementById('wrongAnswerInput1')
 let wrongAnswerInput2 = document.getElementById('wrongAnswerInput2')
 let wrongAnswerInput3 = document.getElementById('wrongAnswerInput3')
+/**
+ * @module
+ */
 
+/**
+ * @summary Displays the question User interface
+ * @function
+ * @public
+ */
 createQuestionOverlay.addEventListener('click', () => {
   createQuestionOverlay.style.backgroundColor = 'rgba(236, 239, 241, 0)'
   createQuestionWrap.style.top = '-100vh'
@@ -14,10 +22,21 @@ createQuestionOverlay.addEventListener('click', () => {
   }, 300)
 })
 
+/**
+ * @summary Fancy function that allows a user to close a window by clicking
+ * outside of it
+ * @function
+ * @public
+ */
 createQuestionWrap.addEventListener('click', (event) => {
   event.stopPropagation()
 })
 
+/**
+ * @summary Displays the question windows
+ * @function
+ * @public
+ */
 let showCreateQuestionWindow = () => {
   createQuestionOverlay.style.display = 'block'
   setTimeout(() => {
@@ -25,7 +44,11 @@ let showCreateQuestionWindow = () => {
     createQuestionWrap.style.top = '15vh'
   }, 10)
 }
-
+/**
+ * @summary HTTP request to insert question data to database
+ * @function
+ * @public
+ */
 let createQuestion = () => {
   serverRequest(
     'POST',

@@ -1,4 +1,3 @@
-// Page elements:
 let questionViewWrap = document.getElementById('questionViewWrap')
 let userInfo = document.getElementById('userInfo')
 let questionNumber = document.getElementById('questionNumber')
@@ -32,7 +31,9 @@ let userObject = {
     highestStreak: 0
   }
 }
-
+/**
+ * @module
+ */
 let InitialScript = () => {
   checkLoginStatus((status) => {
     if (status === true) {
@@ -111,16 +112,17 @@ let playAsGuest = (event = 1) => {
         if (userName.value !== '' &&
           questionType.options[questionType.selectedIndex].value !== '-1' &&
           questionDiff.options[questionDiff.selectedIndex].value !== '-1') {
-          serverRequest('POST', '/playAsGuest', `username=${userName.value}`, (xmlhttp) => {
-            if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-              userObject = JSON.parse(xmlhttp.responseText)
-              notifyTitle.innerHTML = `Welcome ${userObject.username}`
-              document.getElementById('tooltip').style.backgroundImage =
+          serverRequest('POST', '/playAsGuest', `username=${userName.value}`,
+            (xmlhttp) => {
+              if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                userObject = JSON.parse(xmlhttp.responseText)
+                notifyTitle.innerHTML = `Welcome ${userObject.username}`
+                document.getElementById('tooltip').style.backgroundImage =
                   'url(/assets/images/icons/puzzle.svg)'
-              userObject = JSON.parse(xmlhttp.responseText)
-              startTrivia()
-            }
-          })
+                userObject = JSON.parse(xmlhttp.responseText)
+                startTrivia()
+              }
+            })
         } else {
           swal('Error!', 'Please fill out everything!', 'warning')
         }
@@ -132,7 +134,7 @@ let playAsGuest = (event = 1) => {
 }
 
 /**
- * @desc Displays the current user's name to the popup message Username along
+ * @summary Displays the current user's name to the popup message Username along
  * with their current Score and Highest Streak
  */
 let populatePopupResult = () => {
@@ -143,7 +145,8 @@ let populatePopupResult = () => {
 }
 
 /**
- * @desc function displays the next question or the result when the game is over
+ * @summary function displays the next question or the result when the game is
+ * over
  */
 let getNextQuestion = () => {
   questionViewWrap.style.backgroundColor = 'rgba(38, 50, 56, 1)'
@@ -167,7 +170,8 @@ let getNextQuestion = () => {
       }, 1200)
       swal({
         title: 'Bonus Question!!',
-        text: 'Do you want to answer a user-created bonus question?\nYou can double the score or lose it all!',
+        text: 'Do you want to answer a user-created bonus question?' +
+        '\nYou can double the score or lose it all!',
         type: 'question',
         showCancelButton: true,
         confirmButtonText: 'Yes!',
@@ -213,26 +217,32 @@ let playBonus = () => {
 }
 
 /**
- * @desc Opens new HTTP request and looks for POST "/getquestions", if there is
- * a state change, then it will parse into a JSON object which is displayed back
- * to the user in the greet Box which only shows for 0.3 seconds then
- * disappears. Send quiz category and difficulty value to back end.
+ * @summary Opens new HTTP request and looks for POST "/getquestions",
+ * if there is a state change, then it will parse into a JSON object which
+ * is displayed back to the user in the greet Box which only shows for
+ * 0.3 seconds then disappears. Send quiz category and difficulty value to back
+ * end.
  */
 let startTrivia = () => {
-  serverRequest('POST', '/starttrivia', `chosenType=${questionType.options[questionType.selectedIndex].value}&chosenDiff=${questionDiff.options[questionDiff.selectedIndex].value}`, (xmlhttp) => {
-    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-      currentQuestion = JSON.parse(xmlhttp.responseText)
-      displayQuestion()
-      greetBox.style.opacity = '0'
-      setTimeout(() => {
-        greetBox.style.display = 'none'
-      }, 300)
-    }
-  })
+  serverRequest(
+    'POST',
+    '/starttrivia',
+    `chosenType=${questionType.options[questionType.selectedIndex].value}` +
+    `&chosenDiff=${questionDiff.options[questionDiff.selectedIndex].value}`,
+    (xmlhttp) => {
+      if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+        currentQuestion = JSON.parse(xmlhttp.responseText)
+        displayQuestion()
+        greetBox.style.opacity = '0'
+        setTimeout(() => {
+          greetBox.style.display = 'none'
+        }, 300)
+      }
+    })
 }
 
 /**
- * @desc Displays a game question
+ * @summary Displays a game question
  */
 let displayQuestion = () => {
   notifyWrap.style.display = 'block'
@@ -241,10 +251,10 @@ let displayQuestion = () => {
   moveBar()
   setTimeout(() => {
     notification.style.right = '0'
-  }, 1)
+  }, 2)
   setTimeout(() => {
-    userInfo.innerHTML = `${userObject.username} - 
-    ${userObject.currentScore.userScore}`
+    userInfo.innerHTML = `${userObject.username} - ` +
+    `${userObject.currentScore.userScore}`
     questionNumber.innerHTML = 'QUESTION ' + (currentQuestion.index + 1)
     questionContent.innerHTML = currentQuestion.question
     answer1.innerHTML = currentQuestion.option1
@@ -260,14 +270,15 @@ let displayQuestion = () => {
 }
 
 /**
- * @desc Displays a pop up notifying if the answer was right or wrong
- * @param {string} mode - refers to user answer right/wrong
+ * @summary Displays a pop up notifying if the answer was right or wrong
+ * @param {String} mode - refers to user answer right/wrong
+ * @param {String} answer - The correct answer for the current question
  */
 let displayNotification = (mode, answer) => {
   let thumbUp = 'url(/assets/images/icons/thumb-up.svg)'
   let thumbDown = 'url(/assets/images/icons/dislike.svg)'
   let beer = 'url(/assets/images/icons/beer.svg)'
-  let time_up = 'url(/assets/images/icons/sand-clock.svg)'
+  let timeUp = 'url(/assets/images/icons/hourglass.svg)'
   if (mode === 'wrong') {
     notifyTitle.innerHTML = '<div> Wrong! Right Answer Is\n' + answer + '</div>'
     document.getElementById('tooltip').style.backgroundImage = thumbDown
@@ -279,7 +290,7 @@ let displayNotification = (mode, answer) => {
     document.getElementById('tooltip').style.backgroundImage = beer
   } else if (mode === 'timeup') {
     notifyTitle.innerHTML = 'Time Up!!!'
-    document.getElementById('tooltip').style.backgroundImage = time_up
+    document.getElementById('tooltip').style.backgroundImage = timeUp
   }
 }
 

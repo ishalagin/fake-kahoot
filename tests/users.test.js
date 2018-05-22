@@ -17,7 +17,8 @@ beforeAll(() => {
   }
   if (!fs.existsSync('./mine')) {
     fs.mkdirSync('./mine')
-    fs.writeFileSync('./mine/users_data.json', JSON.stringify(dummyFile, null, 4), 'utf8')
+    fs.writeFileSync('./mine/users_data.json',
+      JSON.stringify(dummyFile, null, 4), 'utf8')
   }
   usersInst = new usersM.Users('./mine/users_data.json')
 })
@@ -29,17 +30,11 @@ afterAll(() => {
   }
 })
 
-/**
- * If beforeEach is inside a describe block, it runs for each test in the describe block.
- */
 beforeEach(() => {
   userInst = new usersM.User()
   usersInst = new usersM.Users('./mine/users_data.json')
 })
 
-/**
- * If afterEach is inside a describe block, it runs for each test in the describe block.
- */
 afterEach(() => {
   userInst = undefined
   usersInst = undefined
@@ -60,7 +55,8 @@ describe('Testing class instances in users.js', () => {
 
   it('checks if the user was stored in the database', () => {
     usersInst.storeUser(userInst)
-    expect(usersInst.userList.user[usersInst.userList.user.length - 1].userData).toEqual(userInst.username)
+    expect(usersInst.userList.user[usersInst.userList.user.length - 1].userData)
+      .toEqual(userInst.username)
   })
 })
 

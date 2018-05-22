@@ -2,7 +2,13 @@ let loginWrap = document.getElementById('loginWrap')
 let overlayWindow = document.getElementById('overlayWindow')
 let loginInputUsername = document.getElementById('loginInputUsername')
 let loginInputPassword = document.getElementById('loginInputPassword')
+/**
+ * @module
+ */
 
+/**
+ * @summary overlayWindow
+ */
 overlayWindow.addEventListener('click', () => {
   overlayWindow.style.backgroundColor = 'rgba(236, 239, 241, 0)'
   loginWrap.style.top = '-100vh'
@@ -24,6 +30,11 @@ let showLoginWindow = () => {
   loginInputUsername.focus()
 }
 
+/**
+ * @summary Server request to confirm login
+ * @function
+ * @public
+ */
 let login = () => {
   if (loginInputPassword !== '' && loginInputUsername !== '') {
     serverRequest('POST', '/login', `username=${loginInputUsername.value}&password=${loginInputPassword.value}`, (xmlhttp) => {
@@ -48,6 +59,11 @@ let login = () => {
   }
 }
 
+/**
+ * @summary Server request to confirm logout
+ * @function
+ * @public
+ */
 let logout = () => {
   serverRequest('POST', '/logout', '', (xmlhttp) => {
     if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
@@ -56,8 +72,7 @@ let logout = () => {
   })
 }
 
-
-document.getElementById('loginInputPassword').addEventListener("keyup", function(ev){
+document.getElementById('loginInputPassword').addEventListener('keyup', function (ev) {
   if (ev.keyCode === 13) {
     login()
   }

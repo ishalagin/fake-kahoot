@@ -1,19 +1,13 @@
-/**
- * Request to get API url
- * @type {request}
- */
 const request = require('request')
-/**
- * Lodash helper functions
- * @type {function(*): Object}
- * @private
- */
 const _ = require('lodash')
+/**
+ * @module
+ */
 
 /**
  * @summary fetches question from the Open Trivia Database and
  * returns the results in a formatted object.
- * @function getQuestions
+ * @function
  * @public
  *
  * @param numberOfQuestions Number of questions to be generated.

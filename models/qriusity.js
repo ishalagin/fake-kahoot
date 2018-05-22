@@ -1,10 +1,8 @@
-/**
- * Stuff
- * @type {request}
- */
 const request = require('request')
 
 /**
+ * @summary Gets questions from qriusity by category
+ * @module
  * @deprecated use getQuestionByCategory instead of this
  * @param categoryID
  * @param page
