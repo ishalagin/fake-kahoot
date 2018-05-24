@@ -52,14 +52,15 @@ class Score {
   getLeaderboardStats (category = '9', difficulty = '1') {
     return new Promise((resolve, reject) => {
       db.executeQuery(
-        `SELECT AC."USERNAME",
-         S."SCORE",
-         S."HIGHEST_STREAK",
-         S."DATE" FROM public."SCORES" S,
-         public."ACCOUNTS" AC WHERE 
-         S."QUIZ_CATEGORY_ID" = ${category} 
-         and S."DIFFICULTY_ID" = ${difficulty}
-         and S."ACCOUNT_ID" = AC."ACCOUNT_ID" ORDER BY S."SCORE" DESC;`)
+        `SELECT "USERNAME", ` +
+        `"SCORE", ` +
+        `"HIGHEST_STREAK", ` +
+        `"DATE" FROM public."SCORES", ` +
+        `public."ACCOUNTS" WHERE ` +
+        `"QUIZ_CATEGORY_ID" = ${category} ` +
+        `and "DIFFICULTY_ID" = ${difficulty}` +
+        `and public."SCORES"."ACCOUNT_ID" = public."ACCOUNTS"."ACCOUNT_ID"` +
+        `ORDER BY "SCORE" DESC;`, [])
         .then((queryResult) => {
           let scoreResult = JSON.parse(queryResult)
           let displayString = ''

@@ -221,17 +221,41 @@ class Account {
         WHERE S."ACCOUNT_ID" = ${this.userID} ORDER BY S."DATE" DESC;`).then((queryResult) => {
           let userHistory = JSON.parse(queryResult)
           let displayString = ''
-          // console.log(userHistory)
           for (let i = 0; i < userHistory.length; i++) {
             displayString += `<div class="cards scoreHistoryCards">Time: ${userHistory[i].DATE} | Score: ${userHistory[i].SCORE} | Highest Streak: ${userHistory[i].HIGHEST_STREAK} | Category: ${userHistory[i].CATEGORY_NAME} | Difficulty: ${userHistory[i].DIFFICULTY_LEVEL} </div>\n`
           }
-          // console.log(displayString)
           resolve(displayString)
         }).catch((error) => {
           reject(error)
         })
       } else {
         resolve('Error')
+      }
+    })
+  }
+
+  getCreatedQuestions () {
+    return new Promise((resolve, reject) => {
+      if (this.userID !== undefined) {
+        db.executeQuery(`SELECT * FROM public."QUESTIONS" WHERE "ACCOUNT_ID" = ${this.userID}`).then((result) => {
+          let createdQuestionList = JSON.parse(result)
+          let displayString = ''
+          for (let i = 0; i < createdQuestionList.length; i++) {
+            displayString += `<div class="createdQuestionContainer">\n` +
+              `<label class="createdQuestionCheckBoxContainer">\n` +
+              `<input name="createdQuestionListByAccount" value="${createdQuestionList[i].QUESTION_ID}" type="checkbox" class="createdQuestionCheckBox"/>\n` +
+              `<div class="round cards createdQuestionCheckBoxDisplay"></div>\n` +
+              `</label>\n` +
+              `<div class="cards createdQuestionCards">\n` +
+              `<p>Question: ${createdQuestionList[i].QUESTION_CONTENT}</p>\n` +
+              `<hr/>\n` +
+              `<p>Created on: ${createdQuestionList[i].CREATED_DATE}</p>\n` +
+              `</div>\n` +
+              `</div>\n`
+          }
+          displayString += `<div class="round cards floatingButtons" id="createQuestionButton" onclick="showCreateQuestionWindow()"></div>\n`
+          resolve(displayString)
+        })
       }
     })
   }

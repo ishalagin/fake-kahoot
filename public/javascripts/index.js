@@ -180,7 +180,8 @@ let getNextQuestion = () => {
         animation: false,
         customClass: 'animated tada'
       }).then((doBonus) => {
-        if (doBonus) {
+        console.log(doBonus.value)
+        if (doBonus.value) {
           playBonus()
         } else {
           storeQuizResult()

@@ -1,13 +1,18 @@
 language: node_js
 sudo: required
 services:
-  - docker
+- postgresql
 dist: trusty
 node_js:
-  - "node"
-services:
-  - postgresql
-script: "npm test -- --forceExit"
+- node
+script: npm test -- --forceExit
 before_script:
-  - psql -c 'create database travis;' -U postgres
-  - psql -f ./models/tables.sql
+- psql -c 'create database travis;' -U postgres
+- psql -f ./models/tables.sql
+deploy:
+  provider: heroku
+  api_key:
+    secure: Tr8UYnBQu/7+YADDdYPhCleBgydAoj5LKtHp0AqaG5tDYIB+wKrBiHvuM5qh86G7s8Clwrmru6eDUA/o+znMaa1VWUvr30BSlRAn+vA2cq4zE2PPceVKHr9WkZonaKgb9HiW8c0GaMvdkAlApraeO++q75ZOw6tEwC0Wpfl+s60LfKZTCDblGSY6J09mORo/kC+ZiWzxU4cff3ebVPznNHNExSqwGgJPq346r7LBTbkcO4rzlPHV5cMv8ysHtSODJOamXnUkrShaffYoqZ2tSsHjW+SkhGHjbBlaIUo/XlcXJtrqR6rg7nXG/A1nHrcEFcjTnmdh9cBlu1aaxCuvvqPVpcQdXrFqb6A8KwqPW3pftqNOe6bH+S6511Getk+OAxQEjYKhBAIOqwtBedDEIKam9dXWUkT6JfYOq5rMiOkCgXgCJ5xB296UQ97De8facX1BpGWAI3eugkX/VUdoPZ9vbTCtfmkK5k8vuBA9tMtJ3480yebBx8vL8N5p5hpeKfAMItnzkCNf8y6kd2679mu+uA7oAE58VWDGnJoe5gtOIbEdSfdSXbDFHpslhHly0R/r9PsfgnROLNtuc8nQvmeyzGIcTdOf4JnJc0yjjm/mzIQ20fvY8zykyHFlIW6tVgY1PLnBgEzsiYoUSkn6u/nCg/aHdwDwv5m8f+DD0dQ=
+  app: fake-kahoot
+  on:
+    repo: team2-fake-kahoot/fake-kahoot

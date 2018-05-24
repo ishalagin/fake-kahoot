@@ -158,7 +158,7 @@ document.getElementById('signUpBoxCreateButton').addEventListener('click', funct
       })
     }
   }
-  xmlhttp.send(`USERNAME=${userNameInput.value}&
-  PASSWORD=${passwordInput.value}&
-  CPASSWORD=${cpasswordInput.value}`)
+  xmlhttp.send(`USERNAME=${userNameInput.value}&` +
+  `PASSWORD=${passwordInput.value}&` +
+  `CPASSWORD=${cpasswordInput.value}`)
 })

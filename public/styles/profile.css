@@ -115,3 +115,89 @@
     cursor: pointer;
     background-image: url(/assets/images/icons/investment.svg);
 }
+
+.createdQuestionContainer {
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    cursor: pointer;
+    user-select: none;
+}
+
+.createdQuestionCheckBoxContainer {
+    position: relative;
+    box-sizing: border-box;
+    width: 2em;
+    height: 2em;
+    padding: 0 0.1em 0.1em 0.1em;
+    cursor: pointer;
+}
+
+.createdQuestionCards {
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 0 0 1em;
+    width: calc(100% - 3em);
+    padding: 0.1em;
+    color: var(--dark-font-color);
+}
+
+.createdQuestionCards p {
+    padding: 0.5em;
+    margin: 0;
+}
+
+.createdQuestionCards hr {
+    margin: 0.1em 0.5em;
+    padding: 0;
+    width: 50%;
+    border: 0.01em solid var(--dark-font-color);
+}
+
+.createdQuestionCheckBox {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+}
+
+.createdQuestionCheckBoxDisplay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+    background-color: #eee;
+}
+
+.createdQuestionCheckBoxContainer:hover input ~ .createdQuestionCheckBoxDisplay {
+    background-color: #ccc;
+}
+
+.createdQuestionCheckBoxContainer input:checked ~ .createdQuestionCheckBoxDisplay {
+    background-color: #2196F3;
+}
+
+.createdQuestionCheckBoxDisplay:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.createdQuestionCheckBoxContainer input:checked ~ .createdQuestionCheckBoxDisplay:after {
+    display: block;
+}
+
+.createdQuestionCheckBoxContainer .createdQuestionCheckBoxDisplay:after {
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    margin: -35% 0 0 -35%;
+    background-image: url(/assets/images/icons/check-mark.svg);
+}

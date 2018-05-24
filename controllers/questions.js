@@ -1,5 +1,4 @@
 const opentdb = require('../models/opentdb')
-const users = require('../models/users')
 const pointPerQuestion = 500
 const streakBonus = 200
 
@@ -78,8 +77,14 @@ class Questions {
           })
         }
         this.categoryID = category
-        this.difficultyID = difficulty
-        console.log(this.categoryID, this.difficultyID)
+        if (difficulty === 'easy') {
+          this.difficultyID = 1
+        } else if (difficulty === 'medium') {
+          this.difficultyID = 2
+        } else if (difficulty === 'hard') {
+          this.difficultyID = 3
+        }
+
         resolve(this.minimalQuestionsList)
       }).catch(error => {
         reject(error)

@@ -18,7 +18,19 @@
             <div class="cards scoreHistoryCards">Time: 05/19/2018 15:42:00 | Score: 0 | Highest Streak: 0</div>
         </div>
         <div id="createdQuestionsWrap">
-            <h1>Created Questions:</h1>
+            <h1>Created Questions</h1>
+            <div class="createdQuestionContainer">
+                <label class="createdQuestionCheckBoxContainer">
+                    <input type="checkbox" class="createdQuestionCheckBox" checked="checked">
+                    <div class="round cards createdQuestionCheckBoxDisplay"></div>
+                </label>
+
+                <div class="cards createdQuestionCards">
+                    <p>Question:</p>
+                    <hr/>
+                    <p>Created on:</p>
+                </div>
+            </div>
             <div class="round cards floatingButtons" id="createQuestionButton" onclick="showCreateQuestionWindow()"></div>
         </div>
     </div>

@@ -419,7 +419,8 @@ app.get('/about', (request, response) => {
  */
 app.get('/register', (request, response) => {
   let sessionID = request.session.id.toString()
-  if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
+  if (Object.keys(playingUsers).includes(sessionID) &&
+    playingUsers[sessionID].user.userID !== undefined) {
     response.redirect('/')
   } else {
     response.render('register.hbs')
@@ -435,7 +436,8 @@ app.get('/register', (request, response) => {
  */
 app.get('/profile', (request, response) => {
   let sessionID = request.session.id.toString()
-  if (Object.keys(playingUsers).includes(sessionID) && playingUsers[sessionID].user.userID !== undefined) {
+  if (Object.keys(playingUsers).includes(sessionID) &&
+    playingUsers[sessionID].user.userID !== undefined) {
     response.render('profile.hbs')
   } else {
     response.render('404.hbs')
@@ -446,6 +448,17 @@ app.post('/playerhistory', (request, response) => {
   let sessionID = request.session.id.toString()
   if (Object.keys(playingUsers).includes(sessionID)) {
     playingUsers[sessionID].user.userPlayHistory().then((result) => {
+      response.send(result)
+    })
+  } else {
+    response.send(403)
+  }
+})
+
+app.post('/createdquestions', (request, response) => {
+  let sessionID = request.session.id.toString()
+  if (Object.keys(playingUsers).includes(sessionID)) {
+    playingUsers[sessionID].user.getCreatedQuestions().then((result) => {
       response.send(result)
     })
   } else {
@@ -537,9 +550,12 @@ app.post('/validatepassword', (request, response) => {
  * @code {406} Not acceptable if RegEX does not pass
  */
 app.post('/register', (request, response) => {
-  let USERNAME = request.body.USERNAME.toString()
-  let PASSWORD = request.body.PASSWORD.toString()
-  let CPASSWORD = request.body.CPASSWORD.toString()
+  console.log(request.body.USERNAME)
+  console.log(request.body.PASSWORD)
+  console.log(request.body.CPASSWORD)
+  let USERNAME = request.body.USERNAME
+  let PASSWORD = request.body.PASSWORD
+  let CPASSWORD = request.body.CPASSWORD
   let userAccount = new account.Account()
 
   userAccount.validateUsername(USERNAME).then((result) => {
@@ -584,6 +600,9 @@ app.post('/createQuestion', (request, response) => {
   let wrongAnswer3 = request.body.wrongAnswer3.toString()
   let sessionID = request.session.id.toString()
   let userID = playingUsers[sessionID].user.userID
+  let date = new Date()
+  let timeStamp = `${date.toLocaleDateString('en-CA')} 
+      ${date.toLocaleTimeString('en-CA')}`
 
   userQuestions.createQuestion(
     questionContent,
@@ -591,7 +610,8 @@ app.post('/createQuestion', (request, response) => {
     wrongAnswer1,
     wrongAnswer2,
     wrongAnswer3,
-    userID
+    userID,
+    timeStamp
   ).then((result) => {
     if (result) {
       response.sendStatus(200)

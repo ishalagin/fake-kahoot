@@ -6,7 +6,8 @@ let createQuestion = (
   wrongAnswer1,
   wrongAnswer2,
   wrongAnswer3,
-  userID
+  userID,
+  date
 ) => {
   return new Promise((resolve, reject) => {
     if (
@@ -26,14 +27,16 @@ let createQuestion = (
       "WRONG_ANSWER1",
       "WRONG_ANSWER2",
       "WRONG_ANSWER3",
-      "ACCOUNT_ID"
-      ) VALUES ($1, $2, $3, $4, $5, $6);`, [
+      "ACCOUNT_ID",
+      "CREATED_DATE"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7);`, [
         questionContent,
         correctAnswer,
         wrongAnswer1,
         wrongAnswer2,
         wrongAnswer3,
-        userID]
+        userID,
+        date]
       ).then((result) => {
         resolve(true)
       })
