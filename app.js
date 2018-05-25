@@ -230,9 +230,7 @@ app.get('/leaderboard', (request, response) => {
  */
 app.post('/leaderboardCategory', (request, response) => {
   let newScore = new score.Score()
-  newScore.getLeaderboardStats(
-    request.body.chosenCategory,
-    request.body.chosenDifficulty).then(result => {
+  newScore.getLeaderboardStats(request.body.chosenCategory, request.body.chosenDifficulty).then(result => {
     response.send(result)
   })
 })
